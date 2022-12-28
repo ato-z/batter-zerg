@@ -17,7 +17,14 @@ touchPath(join(rootPath, staticConfig.runtimeToken));
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
-    app.useGlobalPipes(new ValidationPipe());
+    /** 開啓校驗器 */
+    app.useGlobalPipes(
+        new ValidationPipe({
+            whitelist: true,
+            transform: true,
+            forbidNonWhitelisted: true,
+        }),
+    );
     await app.listen(appConfig.runPort, appConfig.runIp);
 }
 bootstrap();
