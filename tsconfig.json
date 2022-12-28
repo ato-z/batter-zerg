@@ -13,7 +13,9 @@
         "baseUrl": "./",
         "paths": {
             "@v1/*": ["./src/modules/v1/*"],
-            "@config/*": ["./src/config/*"]
+            "@config/*": ["./src/config/*"],
+            "@database/*": ["./src/database/*"],
+            "@src/*": ["./src/*"]
         },
         "incremental": true,
         "skipLibCheck": true,
