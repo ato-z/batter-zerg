@@ -7,12 +7,6 @@ export const appConfig = {
     crossDomain: true,
     /** 发生异常时是否抛出, 不抛出写入日志 */
     debug: false,
-    /** 日志写入位置 */
-    savePathLog: 'runtime/log',
-    /** 缓存写入位置 */
-    cachePathLog: 'runtime/cache',
-    /** token信息写入位置 */
-    savePathToken: 'runtime/token',
     /** token有效期 */
     tokenExTime: 7200,
     /** cache缓存时间粒度, 1表示1天 7表示7天 */
