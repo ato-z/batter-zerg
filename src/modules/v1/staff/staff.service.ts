@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { appConfig } from '@config/app';
 import * as sha1 from 'sha1';
 import { type StaffBase, StaffModel } from '@database/staff.database';
-import { NotFoundException, HttpException } from '@nestjs/common';
 import { StaffStatusEnum } from '@src/enum';
+import { ApiNotFoundException, ApiException } from '@src/Exceptions';
 const { hash } = appConfig;
 
 @Injectable()
@@ -28,18 +28,22 @@ export class StaffService {
     }
 
     /** 检验账号是否可用 */
-    private checkStaff(
+    checkStaff(
         staff: StaffBase | null,
         checkPassword: string,
     ): staff is StaffBase {
-        if (staff === null) throw new NotFoundException(`账户不存在`);
+        if (staff === null) throw new ApiNotFoundException(`账户不存在`);
+        if (staff.delete_date !== null)
+            throw new ApiNotFoundException(`账户已删除`);
         if (staff.status === StaffStatusEnum.DIMISSINO)
-            throw new HttpException(`账户已禁用`, 403);
+            throw new ApiException(`账户已禁用`, HttpStatus.FORBIDDEN);
         if (staff.status === StaffStatusEnum.CREATEED)
-            throw new HttpException(`请联系管理员开通账号`, 403);
-
+            throw new ApiException(
+                `请联系管理员开通账号`,
+                HttpStatus.UNAUTHORIZED,
+            );
         if (checkPassword !== staff.password)
-            throw new HttpException('密码错误！', 403);
+            throw new ApiException('密码错误！', HttpStatus.UNAUTHORIZED);
 
         return true;
     }
@@ -72,5 +76,36 @@ export class StaffService {
             keyIndex.toString(16),
         ].join('g');
         return sign;
+    }
+
+    /**
+     * 解密登录密钥
+     */
+    async decodeLoginSign(sign: string) {
+        if (sign === undefined)
+            throw new ApiException('非法访问', HttpStatus.FORBIDDEN);
+        const codeSign = sign.split('g');
+        if (codeSign.length !== 4)
+            throw new ApiException('非法秘钥', HttpStatus.FORBIDDEN);
+        const [pass, createTime, codeId, keyIndex] = codeSign;
+
+        // 校验是否已过有效期, config.signTime为0不判断有效期
+        const _createTime = parseInt('0x' + createTime);
+        if (
+            appConfig.signTime !== 0 &&
+            _createTime + appConfig.signTime < Date.now()
+        ) {
+            throw new ApiException('登录过期', HttpStatus.FORBIDDEN);
+        }
+        // 还原用户id
+        const _codeId = parseInt('0x' + codeId);
+        const _keyIndex = parseInt('0x' + keyIndex);
+        const hashVal = this.charCodeVal(hash);
+        const uid = (_codeId - hashVal) / _keyIndex;
+        // 对用户身份进行校验
+        const staff = await this.model.get({ id: uid });
+        // 检验用户合法性
+        this.checkStaff(staff, pass);
+        return staff;
     }
 }

@@ -10,7 +10,7 @@ export type StaffBase = {
     password: string;
     status: number;
     create_date: string;
-    delete_date?: string;
+    delete_date: string | null;
 };
 @Injectable()
 export class StaffModel extends BaseModel<StaffBase> {
