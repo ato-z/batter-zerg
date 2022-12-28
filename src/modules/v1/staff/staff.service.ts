@@ -15,7 +15,7 @@ export class StaffService {
      * @param str {string} 字符串
      * @returns str字符串每个字符串的ASCII码相加后的结果
      * ```
-     * ServiceUser.charCodeVal('ab')// a + b => 97 + 98 => 195
+     * StaffService.charCodeVal('ab')// a + b => 97 + 98 => 195
      * ```
      */
     private charCodeVal(str: string): number {
@@ -32,7 +32,7 @@ export class StaffService {
         staff: StaffBase | null,
         checkPassword: string,
     ): staff is StaffBase {
-        if (staff === null) throw new NotFoundException(`${name} 不存在~`);
+        if (staff === null) throw new NotFoundException(`账户不存在`);
         if (staff.status === StaffStatusEnum.DIMISSINO)
             throw new HttpException(`账户已禁用`, 403);
         if (staff.status === StaffStatusEnum.CREATEED)
