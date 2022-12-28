@@ -2,7 +2,7 @@ import { resolve, join } from 'path';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { staticConfig } from '@config/static';
-import { touchPath } from 'tool';
+import { touchPath } from './tool';
 
 const rootPath = resolve(__dirname, '../');
 staticConfig.root = rootPath;
