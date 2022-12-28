@@ -4,7 +4,7 @@ import { StaffModel, type StaffBase } from '@database/staff.database';
 import { Injectable } from '@nestjs/common';
 import { TokenMissException } from '@src/Exceptions';
 import { readFileSync, writeFileSync } from 'fs';
-import { resolve, join } from 'path';
+import { join } from 'path';
 import * as sha1 from 'sha1';
 import { StaffService } from './staff/staff.service';
 
