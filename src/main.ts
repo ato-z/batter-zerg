@@ -4,7 +4,7 @@ import { AppModule } from './app.module';
 import { staticConfig } from '@config/static';
 import { touchPath } from './tool';
 
-const rootPath = resolve(__dirname, '../');
+const rootPath = resolve(__dirname);
 staticConfig.root = rootPath;
 
 /**創建運行時目錄 */
