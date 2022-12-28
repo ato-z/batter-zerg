@@ -1,4 +1,4 @@
-export default {
+export const staticConfig = {
     /** 网站运行时的根目录 */
     root: '/',
     /** 静态资源保存位置 */

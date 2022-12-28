@@ -1,4 +1,4 @@
-export default {
+export const databaseConfig = {
     host: '127.0.0.1',
     // 数据库用户名
     user: 'root',

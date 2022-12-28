@@ -1,4 +1,4 @@
-export default {
+export const appConfig = {
     /** 开启所在的端口 */
     runPort: 3000,
     /** 上线使用0.0.0.0 */
@@ -20,7 +20,7 @@ export default {
     /** 是否开启缓存 */
     cacheOpen: false,
     /** 密码加盐 */
-    hash: '!@#$#&*(^&*&)',
+    hash: 'wNB2+c#%',
     /** 用户登录密钥有效期， 登录密钥可换取token。 单位毫秒 */
     // signTime: 0 // 0为永久有效， 除非用户更换密码
     signTime: 30 * 24 * 3600 * 1000, // 30天有效
