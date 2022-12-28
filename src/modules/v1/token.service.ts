@@ -2,7 +2,7 @@ import { appConfig } from '@config/app';
 import { staticConfig } from '@config/static';
 import { StaffModel, type StaffBase } from '@database/staff.database';
 import { Injectable } from '@nestjs/common';
-import { TokenMissException } from '@src/Exceptions';
+import { TokenMissException } from '@src/exceptions';
 import { readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import * as sha1 from 'sha1';

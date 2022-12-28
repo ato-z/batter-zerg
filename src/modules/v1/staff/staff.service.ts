@@ -3,7 +3,7 @@ import { appConfig } from '@config/app';
 import * as sha1 from 'sha1';
 import { type StaffBase, StaffModel } from '@database/staff.database';
 import { StaffStatusEnum } from '@src/enum';
-import { ApiNotFoundException, ApiException } from '@src/Exceptions';
+import { ApiNotFoundException, ApiException } from '@src/exceptions';
 const { hash } = appConfig;
 
 @Injectable()
