@@ -5,6 +5,7 @@ import { staticConfig } from '@config/static';
 import { touchPath } from './tool';
 import { appConfig } from '@config/app';
 import { ValidationPipe } from '@nestjs/common';
+import tokenMiddleware from './middleware/token.middleware';
 
 const rootPath = resolve(__dirname);
 staticConfig.root = rootPath;
@@ -17,6 +18,8 @@ touchPath(join(rootPath, staticConfig.runtimeToken));
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
+    /** 开启中间件 */
+    app.use(tokenMiddleware);
     /** 開啓校驗器 */
     app.useGlobalPipes(
         new ValidationPipe({
