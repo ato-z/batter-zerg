@@ -15,8 +15,9 @@ export class StaffController extends V1BaseCoontroller {
     }
 
     @Get('get')
-    getUserInfo() {
-        return 'hi';
+    getUserInfo(@Headers('token') token: string) {
+        const staff = this.tokenService.getByStaffByToken(token);
+        return staff;
     }
 
     /** 用户登录 */

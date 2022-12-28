@@ -83,7 +83,7 @@ export class TokenService {
     }
 
     /** 获取当前的用户信息 */
-    async getByCurrentUser(tokenKey: string) {
+    async getByStaffByToken(tokenKey: string) {
         const { staffModel, satffService } = this;
         const token = this.get(tokenKey);
         const staff = await staffModel.find(token.id);
