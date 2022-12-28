@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { staticConfig } from '@config/static';
 import { touchPath } from './tool';
+import { appConfig } from '@config/app';
 
 const rootPath = resolve(__dirname);
 staticConfig.root = rootPath;
@@ -15,6 +16,6 @@ touchPath(join(rootPath, staticConfig.runtimeToken));
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
-    await app.listen(3000);
+    await app.listen(appConfig.runPort, appConfig.runIp);
 }
 bootstrap();
