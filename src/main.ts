@@ -16,6 +16,10 @@ touchPath(join(rootPath, staticConfig.runtimeCache));
 touchPath(join(rootPath, staticConfig.runtimeLog));
 touchPath(join(rootPath, staticConfig.runtimeToken));
 
+/** 靜態目錄 */
+touchPath(join(rootPath, staticConfig.statiu));
+touchPath(join(rootPath, staticConfig.upload));
+
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
     /** 开启中间件 */

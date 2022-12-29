@@ -20,4 +20,8 @@ export const appConfig = {
     signTime: 30 * 24 * 3600 * 1000, // 30天有效
     /** token有效期 */
     expTime: 7200,
+    /** 图片上传大小限制 */
+    maxUploadImage: 5 * 1024 * 1024, // 5M
+    /** 圖像上傳至服務器的默認色碼 */
+    themeImageColor: '121212',
 };
