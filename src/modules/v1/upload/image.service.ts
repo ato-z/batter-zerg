@@ -26,16 +26,20 @@ export class ImageService {
      * 上传至本地
      */
     async uploadToLocal(img: imageFile) {
+        // 校验文件是否合法
         this.checkoutImageFile(img);
         const { width, height, format } = this.getImageProp(img);
         const filename = `${sha1(img.buffer.toString())}.${format}`;
-        const olderImage = await this.olderImage(filename);
-        if (olderImage !== null) return olderImage; // 如果图像已被上传过，直接返回数据库中的图像信息
 
-        // 先保存到本地
+        // 如果图像已被上传过，直接返回数据库中的图像信息
+        const olderImage = await this.olderImage(filename);
+        if (olderImage !== null) return olderImage;
+
+        // 先保存到本地服务器
         const { localPath, servicePath } = this.createImageSavePath();
         writeFileSync(pathJoin(localPath, filename), img.buffer);
         const path = pathJoin(servicePath, filename).replace(/\\|\//g, '\\/');
+
         // 保存到数据库
         const insertId = await this.saveImageInDb({
             path: path,
