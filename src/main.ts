@@ -18,13 +18,13 @@ touchPath(join(rootPath, staticConfig.runtimeLog));
 touchPath(join(rootPath, staticConfig.runtimeToken));
 
 /** 靜態目錄 */
-touchPath(join(rootPath, staticConfig.statiu));
+touchPath(join(rootPath, staticConfig.static));
 touchPath(join(rootPath, staticConfig.upload));
 
 async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
     /** 开启静态服务器 */
-    app.useStaticAssets(join(rootPath, staticConfig.statiu), {
+    app.useStaticAssets(join(rootPath, staticConfig.static), {
         prefix: '/static',
     });
 
