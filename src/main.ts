@@ -6,6 +6,7 @@ import { touchPath } from './tool';
 import { appConfig } from '@config/app';
 import { ValidationPipe } from '@nestjs/common';
 import tokenMiddleware from './middleware/token.middleware';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 const rootPath = resolve(__dirname);
 staticConfig.root = rootPath;
@@ -21,9 +22,12 @@ touchPath(join(rootPath, staticConfig.statiu));
 touchPath(join(rootPath, staticConfig.upload));
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule);
-    /** 开启中间件 */
-    app.use(tokenMiddleware);
+    const app = await NestFactory.create<NestExpressApplication>(AppModule);
+    /** 开启静态服务器 */
+    app.useStaticAssets(join(rootPath, staticConfig.statiu), {
+        prefix: '/static',
+    });
+
     /** 開啓校驗器 */
     app.useGlobalPipes(
         new ValidationPipe({
@@ -32,6 +36,10 @@ async function bootstrap() {
             forbidNonWhitelisted: true,
         }),
     );
+
+    /** 开启中间件 */
+    app.use(tokenMiddleware);
+
     await app.listen(appConfig.runPort, appConfig.runIp);
 }
 bootstrap();
