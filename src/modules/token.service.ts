@@ -6,7 +6,6 @@ import { TokenMissException } from '@src/exceptions';
 import { readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import * as sha1 from 'sha1';
-import { StaffService } from './v1/staff/staff.service';
 
 export type tokenProp = {
     id: number;
@@ -43,10 +42,7 @@ class TokenMap {
 
 @Injectable()
 export class TokenService {
-    constructor(
-        private readonly staffModel: StaffModel,
-        private readonly satffService: StaffService,
-    ) {}
+    constructor(private readonly staffModel: StaffModel) {}
 
     static readonly tokenMap = new TokenMap();
 
@@ -85,11 +81,9 @@ export class TokenService {
 
     /** 获取当前的用户信息 */
     async getByStaffByToken(tokenKey: string) {
-        const { staffModel, satffService } = this;
+        const { staffModel } = this;
         const token = this.get(tokenKey);
         const staff = await staffModel.find(token.id);
-        const staffData = await staff.toJSON();
-        satffService.checkStaff(staffData, token.password);
         return staff;
     }
 }

@@ -33,8 +33,7 @@ export class StaffService {
         checkPassword: string,
     ): staff is StaffBase {
         if (staff === null) throw new ApiNotFoundException(`账户不存在`);
-        if (staff.delete_date !== null)
-            throw new ApiNotFoundException(`账户已删除`);
+        if (staff.delete_date) throw new ApiNotFoundException(`账户已删除`);
         if (staff.status === StaffStatusEnum.DIMISSINO)
             throw new ApiException(`账户已禁用`, HttpStatus.FORBIDDEN);
         if (staff.status === StaffStatusEnum.CREATEED)
