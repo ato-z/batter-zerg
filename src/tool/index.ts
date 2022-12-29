@@ -1,4 +1,5 @@
 import { accessSync, mkdirSync } from 'fs';
+import { Parser } from 'imagesize';
 
 /**
  * 个位数填充0
@@ -82,4 +83,17 @@ export const touchPath = (path: string): void => {
         const currentPath: string = decodePath.join('/');
         mkdirSync(currentPath);
     }
+};
+
+/**
+ * 返回图像的大小
+ * @param buffer 二进制数据
+ */
+export const getImageAttr = (
+    buffer: Buffer,
+): { format: string; width: number; height: number } => {
+    const parser = Parser();
+    const statu = parser.parse(buffer);
+    if (Parser.DONE !== statu) return null;
+    return parser.getResult();
 };
