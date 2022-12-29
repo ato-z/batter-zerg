@@ -17,9 +17,8 @@ export class StaffController extends V1BaseCoontroller {
     @Get('get')
     async getUserInfo(@Headers('token') token: string) {
         const staff = await this.tokenService.getByStaffByToken(token);
-        staff.hidden('password');
-        staff.hidden('status');
-        return staff;
+        staff.hidden(['password', 'status', 'delete_date', 'id']);
+        return staff.toJSON();
     }
 
     /** 用户登录 */

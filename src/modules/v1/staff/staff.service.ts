@@ -54,9 +54,10 @@ export class StaffService {
         const staff = await this.model.get({
             name: name,
         });
-        this.checkStaff(staff, codePassworld);
+        const staffData = await staff.toJSON();
+        this.checkStaff(staffData, codePassworld);
 
-        return staff;
+        return staffData;
     }
     /** 傳入用戶名 + 密碼返回一段加密的密碼 */
     static codePassworld(name: string, password: string) {
@@ -104,8 +105,9 @@ export class StaffService {
         const uid = (_codeId - hashVal) / _keyIndex;
         // 对用户身份进行校验
         const staff = await this.model.get({ id: uid });
+        const staffData = await staff.toJSON();
         // 检验用户合法性
-        this.checkStaff(staff, pass);
-        return staff;
+        this.checkStaff(staffData, pass);
+        return staffData;
     }
 }

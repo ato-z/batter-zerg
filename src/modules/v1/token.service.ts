@@ -87,7 +87,8 @@ export class TokenService {
         const { staffModel, satffService } = this;
         const token = this.get(tokenKey);
         const staff = await staffModel.find(token.id);
-        satffService.checkStaff(staff, token.password);
+        const staffData = await staff.toJSON();
+        satffService.checkStaff(staffData, token.password);
         return staff;
     }
 }
