@@ -6,7 +6,7 @@ import { TokenMissException } from '@src/exceptions';
 import { readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import * as sha1 from 'sha1';
-import { StaffService } from './staff/staff.service';
+import { StaffService } from './v1/staff/staff.service';
 
 export type tokenProp = {
     id: number;

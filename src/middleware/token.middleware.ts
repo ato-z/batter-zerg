@@ -1,5 +1,5 @@
 import { HttpException } from '@nestjs/common';
-import { TokenService } from '@v1/token.service';
+import { TokenService } from '@src/modules/token.service';
 import { type Request, type Response } from 'express';
 
 /**

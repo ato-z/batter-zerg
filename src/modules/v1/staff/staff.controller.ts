@@ -1,7 +1,7 @@
 import { Body, Post, Headers } from '@nestjs/common';
 import { Controller, Get } from '@nestjs/common';
 import { V1BaseCoontroller } from '@v1/base.controller';
-import { TokenService } from '@v1/token.service';
+import { TokenService } from '@src/modules/token.service';
 import { StaffLoginDTO } from './staff.dto';
 import { StaffService } from './staff.service';
 
