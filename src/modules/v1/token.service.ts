@@ -23,6 +23,7 @@ class TokenMap {
         try {
             const json = readFileSync(join(savePath, tokenKey), 'utf-8');
             const token = JSON.parse(json);
+            if (token.expTime <= Date.now()) throw new TokenMissException();
             return token;
         } catch {
             throw new TokenMissException();
