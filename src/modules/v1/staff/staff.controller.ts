@@ -23,18 +23,18 @@ export class StaffController extends V1BaseCoontroller {
 
     /** 用户登录 */
     @Post('login')
-    async login(@Body() post: StaffLoginDTO) {
+    async login(@Body() post: StaffLoginDTO, @Headers('User-Agent') ua) {
         const { staffService } = this;
         const staffData = await staffService.login(post.name, post.password);
-        const sign = await staffService.createSign(staffData);
+        const sign = await staffService.createSign(staffData, ua ?? '');
         return { sign };
     }
 
     /** 颁发临时token */
     @Get('token')
-    async token(@Headers('sign') sign: string) {
+    async token(@Headers('sign') sign: string, @Headers('User-Agent') ua) {
         const { staffService, tokenService } = this;
-        const staffData = await staffService.decodeLoginSign(sign);
+        const staffData = await staffService.decodeLoginSign(sign, ua ?? '');
         const tokenData = tokenService.create(staffData);
         return { tokenData };
     }

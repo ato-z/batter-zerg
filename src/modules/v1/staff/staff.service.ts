@@ -65,14 +65,14 @@ export class StaffService {
     }
 
     /** 创建用户登录凭证 */
-    async createSign(staff: StaffBase) {
+    async createSign(staff: StaffBase, userAgent: string) {
         const id = staff.id;
         const pass = staff.password.replace(/g/gi, '');
         const keyIndex = hash.charCodeAt(id % hash.length);
         const hashVal = this.charCodeVal(hash);
         const now = Date.now().toString(16);
         const sign = [
-            sha1(pass + now),
+            sha1(pass + now + userAgent),
             now,
             (hashVal + id * keyIndex).toString(16),
             keyIndex.toString(16),
@@ -83,7 +83,7 @@ export class StaffService {
     /**
      * 解密登录密钥
      */
-    async decodeLoginSign(sign: string) {
+    async decodeLoginSign(sign: string, userAgent: string) {
         if (sign === undefined)
             throw new ApiException('非法访问', HttpStatus.FORBIDDEN);
         const codeSign = sign.split('g');
@@ -107,7 +107,7 @@ export class StaffService {
         // 对用户身份进行校验
         const staff = await this.model.get({ id: uid });
         const staffData = await staff.toJSON();
-        const checkPassword = sha1(staffData.password + createTime);
+        const checkPassword = sha1(staffData.password + createTime + userAgent);
         if (checkPassword !== codePass)
             throw new ApiException('非法秘钥', HttpStatus.FORBIDDEN);
         // 检验用户合法性
