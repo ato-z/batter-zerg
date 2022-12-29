@@ -8,3 +8,8 @@ export enum StaffStatusEnum {
     // 正常使用
     PUBLIC = 1,
 }
+
+export enum ImageFrom {
+    // 本地
+    LOCAL = 1,
+}
