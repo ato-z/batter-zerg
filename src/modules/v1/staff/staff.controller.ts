@@ -15,8 +15,9 @@ export class StaffController extends V1BaseCoontroller {
     }
 
     @Get('get')
-    getUserInfo(@Headers('token') token: string) {
-        const staff = this.tokenService.getByStaffByToken(token);
+    async getUserInfo(@Headers('token') token: string) {
+        const staff = await this.tokenService.getByStaffByToken(token);
+        console.log(staff);
         return staff;
     }
 
