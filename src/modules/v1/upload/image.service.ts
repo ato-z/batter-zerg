@@ -73,9 +73,11 @@ export class ImageService {
         const servicePath = pathJoin(
             '/',
             staticConfig.upload,
+            staticConfig.uploadPic,
             `${date.getFullYear().toString()}-${fillZero(date.getMonth() + 1)}`,
         );
         const localPath = pathJoin(staticConfig.root, servicePath);
+        console.log(localPath);
         touchPath(localPath);
         return {
             localPath,

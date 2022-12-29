@@ -20,6 +20,7 @@ touchPath(join(rootPath, staticConfig.runtimeToken));
 /** 靜態目錄 */
 touchPath(join(rootPath, staticConfig.static));
 touchPath(join(rootPath, staticConfig.upload));
+touchPath(join(rootPath, staticConfig.upload, staticConfig.uploadPic));
 
 async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);

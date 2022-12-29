@@ -13,4 +13,6 @@ export const staticConfig = {
     runtimeToken: 'runtime/token',
     /** 文件上傳位置 */
     upload: 'static/upload',
+    /** 图片上傳位置 */
+    uploadPic: 'pic',
 };
