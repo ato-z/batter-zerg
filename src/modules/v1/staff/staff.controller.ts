@@ -25,8 +25,7 @@ export class StaffController extends V1BaseCoontroller {
     @Post('login')
     async login(@Body() post: StaffLoginDTO) {
         const { staffService } = this;
-        const staff = await staffService.login(post.name, post.password);
-        const staffData = await staff.toJSON();
+        const staffData = await staffService.login(post.name, post.password);
         const sign = await staffService.createSign(staffData);
         return { sign };
     }
@@ -35,8 +34,7 @@ export class StaffController extends V1BaseCoontroller {
     @Get('token')
     async token(@Headers('sign') sign: string) {
         const { staffService, tokenService } = this;
-        const staff = await staffService.decodeLoginSign(sign);
-        const staffData = await staff.toJSON();
+        const staffData = await staffService.decodeLoginSign(sign);
         const tokenData = tokenService.create(staffData);
         return { tokenData };
     }

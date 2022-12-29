@@ -70,9 +70,10 @@ export class StaffService {
         const pass = staff.password.replace(/g/gi, '');
         const keyIndex = hash.charCodeAt(id % hash.length);
         const hashVal = this.charCodeVal(hash);
+        const now = Date.now().toString(16);
         const sign = [
-            pass,
-            Date.now().toString(16),
+            sha1(pass + now),
+            now,
             (hashVal + id * keyIndex).toString(16),
             keyIndex.toString(16),
         ].join('g');
@@ -88,7 +89,7 @@ export class StaffService {
         const codeSign = sign.split('g');
         if (codeSign.length !== 4)
             throw new ApiException('非法秘钥', HttpStatus.FORBIDDEN);
-        const [pass, createTime, codeId, keyIndex] = codeSign;
+        const [codePass, createTime, codeId, keyIndex] = codeSign;
 
         // 校验是否已过有效期, config.signTime为0不判断有效期
         const _createTime = parseInt('0x' + createTime);
@@ -106,8 +107,11 @@ export class StaffService {
         // 对用户身份进行校验
         const staff = await this.model.get({ id: uid });
         const staffData = await staff.toJSON();
+        const checkPassword = sha1(staffData.password + createTime);
+        if (checkPassword !== codePass)
+            throw new ApiException('非法秘钥', HttpStatus.FORBIDDEN);
         // 检验用户合法性
-        this.checkStaff(staffData, pass);
+        this.checkStaff(staffData, staffData.password);
         return staffData;
     }
 }
