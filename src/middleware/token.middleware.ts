@@ -8,7 +8,10 @@ import { type Request, type Response } from 'express';
 export default async (req: Request, res: Response, next: () => void) => {
     const { url } = req;
     try {
-        if (!/^\/v\d+\/staff\/token/.test(url)) {
+        if (
+            !/^\/v\d+\/staff\/token/i.test(url) &&
+            !/^\/v\d+\/staff\/login/i.test(url)
+        ) {
             const { token } = req.headers as unknown as { token: string };
             TokenService.tokenMap.get(token);
         }

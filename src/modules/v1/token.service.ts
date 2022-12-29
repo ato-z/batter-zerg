@@ -57,14 +57,14 @@ export class TokenService {
     create(staff: StaffBase) {
         const { id, level, nickname, name, password } = staff;
         const tokenKey = this.codeTokenKey(staff);
-        const current = Date.now();
+        const expTime = Date.now() + appConfig.tokenExTime * 1000;
         const token: tokenProp = {
             id,
             level,
             nickname,
             name,
             password,
-            expTime: appConfig.expTime + current,
+            expTime,
         };
         TokenService.tokenMap.set(tokenKey, token);
         return tokenKey;
