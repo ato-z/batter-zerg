@@ -1,4 +1,4 @@
-import { IsNumber, IsString, Length } from 'class-validator';
+import { IsString, Length } from 'class-validator';
 import { PartialType } from '@nestjs/mapped-types';
 export class SchoolCreateDTO {
     @IsString()
