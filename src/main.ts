@@ -7,6 +7,7 @@ import { appConfig } from '@config/app';
 import { ValidationPipe } from '@nestjs/common';
 import tokenMiddleware from './middleware/token.middleware';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 const rootPath = resolve(__dirname);
 staticConfig.root = rootPath;
@@ -21,6 +22,17 @@ touchPath(join(rootPath, staticConfig.runtimeToken));
 touchPath(join(rootPath, staticConfig.static));
 touchPath(join(rootPath, staticConfig.upload));
 touchPath(join(rootPath, staticConfig.upload, staticConfig.uploadPic));
+
+function createSwagger(app: NestExpressApplication) {
+    const options = new DocumentBuilder()
+        .setTitle(appConfig.swagger.title)
+        .setVersion(appConfig.swagger.version)
+        .setDescription(appConfig.swagger.des)
+        .build();
+
+    const document = SwaggerModule.createDocument(app, options);
+    SwaggerModule.setup('/docs', app, document);
+}
 
 async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -37,6 +49,9 @@ async function bootstrap() {
             forbidNonWhitelisted: true,
         }),
     );
+
+    /** 接入文檔 */
+    createSwagger(app);
 
     /** 开启中间件 */
     app.use(tokenMiddleware);

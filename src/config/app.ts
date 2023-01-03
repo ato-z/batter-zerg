@@ -24,4 +24,11 @@ export const appConfig = {
     maxUploadImage: 5 * 1024 * 1024, // 5M
     /** 圖像上傳至服務器的默認色碼 */
     themeImageColor: '121212',
+    /** swagger文檔配置 */
+    swagger: {
+        title: '易物後端api',
+        des: '易物後端api説明文檔。獲取文檔配置文件， 請 <a href="/docs-json" target="zerg_api">點擊這裏</a>',
+        /** 當前主aip版本 */
+        version: 'v1',
+    },
 };
