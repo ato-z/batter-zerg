@@ -75,7 +75,7 @@ export class SchoolController extends V1BaseCoontroller {
         const ids = this.toNumberIds(schoolIds);
         const { schoolService } = this;
         await schoolService.del(...ids);
-        return { message: '已刪除' };
+        return { message: '已放入回收列表' };
     }
 
     /** 物理销毁 */
@@ -89,7 +89,7 @@ export class SchoolController extends V1BaseCoontroller {
             if (ids.length === 0) throw new ApiException('無操作');
             await schoolService.destroy(...ids);
         }
-        return { message: '已銷毀~' };
+        return { message: '已銷毀' };
     }
 
     /** 回收列表 */
@@ -114,22 +114,12 @@ export class SchoolController extends V1BaseCoontroller {
     async recall(@Param('school_ids') schoolIds: string) {
         const ids = this.toNumberIds(schoolIds);
         const { schoolService } = this;
-        const state = await schoolService.recall(...ids);
-        switch (state) {
-            case 0:
-                return { message: '部分復原,部分學校名重複,已忽略' };
-            case 1:
-                return { message: '已復原' };
-            default:
-                return { message: '無操作,可能存在學校名重複' };
-        }
-    }
-
-    private toNumberIds(schoolIds: string) {
-        const ids = schoolIds
-            .split(',')
-            .filter((id) => +id)
-            .map((id) => +id);
-        return ids;
+        /**
+         * 0：  部分復原,部分學校名重複
+         * 1：  全部復原
+         * -1: 無操作,可能存在學校名重複
+         */
+        await schoolService.recall(...ids);
+        return { message: '已從回收列表中恢復' };
     }
 }
