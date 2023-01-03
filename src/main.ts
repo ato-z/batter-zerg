@@ -4,7 +4,7 @@ import { AppModule } from './app.module';
 import { staticConfig } from '@config/static';
 import { touchPath } from './tool';
 import { appConfig } from '@config/app';
-import { ValidationPipe } from '@nestjs/common';
+import { AppValidationPipe } from './validation';
 import tokenMiddleware from './middleware/token.middleware';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -43,7 +43,7 @@ async function bootstrap() {
 
     /** 開啓校驗器 */
     app.useGlobalPipes(
-        new ValidationPipe({
+        new AppValidationPipe({
             whitelist: true,
             transform: true,
             forbidNonWhitelisted: true,
