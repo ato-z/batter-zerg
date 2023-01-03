@@ -1,6 +1,6 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { StaffLevel } from '@src/enum';
-import { IsNumber, IsString, Length, Max } from 'class-validator';
+import { StaffLevel, StaffStatusEnum } from '@src/enum';
+import { IsIn, IsNumber, IsString, Length, Max } from 'class-validator';
 
 export class StaffLoginDTO {
     @IsString()
@@ -18,10 +18,6 @@ export class StaffPropDTO {
     readonly name: string;
 
     @IsString()
-    @Length(7, 16)
-    readonly password: string;
-
-    @IsString()
     @Length(2, 8)
     readonly nickname: string;
 
@@ -29,17 +25,35 @@ export class StaffPropDTO {
     readonly cover: number;
 
     @IsNumber()
-    @Max(StaffLevel.ADMIN)
+    @IsIn([StaffLevel.ADMIN, StaffLevel.LEADER, StaffLevel.SALESMAN])
     readonly level: number;
+
+    @IsIn([
+        StaffStatusEnum.DIMISSINO,
+        StaffStatusEnum.CREATEED,
+        StaffStatusEnum.PUBLIC,
+    ])
+    readonly status: number;
 }
 
 export class StaffCreateDTO extends StaffPropDTO {
     @IsString()
     @Length(7, 16)
+    readonly password: string;
+
+    @IsString()
+    @Length(7, 16)
     readonly rePassword: string;
 }
 
-export class StaffUpdateDTO extends PartialType(StaffPropDTO) {
-    @IsNumber()
-    readonly status?: string;
+export class StaffUpdateDTO extends PartialType(StaffPropDTO) {}
+
+export class StaffRePasswordDTO {
+    @IsString()
+    @Length(7, 16)
+    readonly password: string;
+
+    @IsString()
+    @Length(7, 16)
+    readonly rePassword: string;
 }

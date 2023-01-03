@@ -1,8 +1,22 @@
-import { Body, Post, Headers, Query, Param } from '@nestjs/common';
+import {
+    Body,
+    Post,
+    Headers,
+    Query,
+    Param,
+    Put,
+    Patch,
+    Delete,
+} from '@nestjs/common';
 import { Controller, Get } from '@nestjs/common';
 import { V1BaseCoontroller } from '@v1/base.controller';
 import { TokenService } from '@src/modules/token.service';
-import { StaffCreateDTO, StaffLoginDTO } from './staff.dto';
+import {
+    StaffCreateDTO,
+    StaffLoginDTO,
+    StaffRePasswordDTO,
+    StaffUpdateDTO,
+} from './staff.dto';
 import { StaffSelect, StaffService } from './staff.service';
 import { OP } from 'mysql-crud-core/enum';
 import { WhereParmaValue } from 'mysql-crud-core';
@@ -69,6 +83,35 @@ export class StaffController extends V1BaseCoontroller {
         return list;
     }
 
+    /** 軟刪除員工 */
+    @Delete('delete/:staff_ids')
+    async del(@Param('staff_ids') staffIds: string) {
+        console.log(staffIds);
+        const ids = this.toNumberIds(staffIds);
+        const { staffService } = this;
+        await staffService.del(...ids);
+        return { message: '已放入回收列表' };
+    }
+
+    /** 硬刪除員工 */
+    @Delete('destroy/:staff_ids')
+    async destroy(@Param('staff_ids') staffIds: string) {
+        console.log(staffIds);
+        const ids = this.toNumberIds(staffIds);
+        const { staffService } = this;
+        await staffService.destroy(...ids);
+        return { message: '已銷毀' };
+    }
+
+    /** 復原員工 */
+    @Patch('recall/:staff_ids')
+    async recall(@Param('staff_ids') staffIds: string) {
+        const ids = this.toNumberIds(staffIds);
+        const { staffService } = this;
+        await staffService.recall(...ids);
+        return { message: '已從回收列表中恢復' };
+    }
+
     /** 返回員工的配置屬性 */
     @Get('prop')
     async getStaffProp(switchLevel?: number) {
@@ -85,12 +128,12 @@ export class StaffController extends V1BaseCoontroller {
         @Param('staff_id') staffId: number,
         @Headers('token') token: string,
     ) {
-        const currentStaff = await this.tokenService.getByStaffByToken(token);
-        const { level } = await currentStaff.toJSON();
-        const findStaff = await this.staffService.getStaffByID(staffId);
+        const { findStaff } = await this.touchStaffDataByCurrentStaff(
+            token,
+            staffId,
+        );
         findStaff.append('switch', () => this.getStaffProp());
-        const findStaffData = await findStaff.toJSON();
-        if (findStaffData.level >= level) throw new ApiException('非法訪問');
+        const findStaffData = findStaff.toJSON();
         return findStaffData;
     }
 
@@ -118,6 +161,34 @@ export class StaffController extends V1BaseCoontroller {
         return { sign };
     }
 
+    /** 修改 */
+    @Put('edit/:staff_id')
+    async edit(
+        @Headers('token') token: string,
+        @Param('staff_id') staffId: number,
+        @Body() updata: StaffUpdateDTO,
+    ) {
+        const { findStaffData, currentStaffData } =
+            await this.touchStaffDataByCurrentStaff(token, staffId);
+        const { staffService } = this;
+        await staffService.updataStaff(findStaffData, currentStaffData, updata);
+        return { message: '更新成功~' };
+    }
+
+    /** 重置密码 */
+    @Put('re_password/:staff_id')
+    async rePass(
+        @Headers('token') token: string,
+        @Param('staff_id') staffId: number,
+        @Body() updata: StaffRePasswordDTO,
+    ) {
+        const { findStaffData, currentStaffData } =
+            await this.touchStaffDataByCurrentStaff(token, staffId);
+        const { staffService } = this;
+        await staffService.updataStaff(findStaffData, currentStaffData, updata);
+        return { message: '密码已更换~' };
+    }
+
     /** 颁发临时token */
     @Get('token')
     async token(@Headers('sign') sign: string, @Headers('User-Agent') ua) {
@@ -125,5 +196,21 @@ export class StaffController extends V1BaseCoontroller {
         const staffData = await staffService.decodeLoginSign(sign, ua ?? '');
         const tokenData = tokenService.create(staffData);
         return { tokenData };
+    }
+
+    private async touchStaffDataByCurrentStaff(
+        token: string,
+        touchStaffId: number,
+    ) {
+        const currentStaff = await this.tokenService.getByStaffByToken(token);
+        const currentStaffData = await currentStaff.toJSON();
+        const findStaff = await this.staffService.getStaffByID(touchStaffId);
+        const findStaffData = await findStaff.toJSON();
+        if (
+            findStaffData.id !== currentStaffData.id &&
+            findStaffData.level >= currentStaffData.level
+        )
+            throw new ApiException('非法訪問');
+        return { findStaff, currentStaff, findStaffData, currentStaffData };
     }
 }
