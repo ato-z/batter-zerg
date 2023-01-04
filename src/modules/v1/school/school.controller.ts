@@ -41,7 +41,6 @@ export class SchoolController extends V1BaseCoontroller {
     @Get('list')
     async list(@Query() query) {
         const { start = 0, end = 10, name } = query;
-
         const result = this.schoolService.list({
             limit: [start, end],
             where: {

@@ -104,14 +104,21 @@ export class StaffService extends SignService {
     /** 返回员工列表 */
     async list(option: StaffSelect) {
         const list = await this.model.selete(option);
-        if (list === null) return [];
-        const result = await Promise.all(
+        if (list === null) return { list: [], total: 0 };
+        const listData = await Promise.all(
             list.map((item) => {
                 item.hidden(['password']);
                 return item.toJSON();
             }),
         );
-        return result;
+        const total = await this.model.total({
+            where: option.where,
+            join: option.join,
+        });
+        return {
+            list: listData,
+            total,
+        };
     }
 
     /** 创建员工 */

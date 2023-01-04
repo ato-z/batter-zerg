@@ -35,12 +35,18 @@ export class SchoolService {
     /** 返回列表 */
     async list(query: SchoolSelect<SchoolModel['selete']>) {
         const list = await this.schoolModel.selete(query);
-        if (list === null) return [];
-        const result = await Promise.all(
+        if (list === null) return { total: 0, list: [] };
+        const listData = await Promise.all(
             list.map((item) => item.hidden(['delete_date']).toJSON()),
         );
-
-        return result;
+        const total = await this.schoolModel.total({
+            where: query.where,
+            join: query.join,
+        });
+        return {
+            list: listData,
+            total,
+        };
     }
 
     /** 復原學校 */

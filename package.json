@@ -31,7 +31,7 @@
     "imagesize": "^1.0.0",
     "mysql": "^2.18.1",
     "mysql-crud-core": "^1.0.8",
-    "mysql-crud-model": "^1.1.7",
+    "mysql-crud-model": "^1.1.9",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
