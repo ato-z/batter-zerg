@@ -24,7 +24,6 @@ import { WhereParmaValue } from 'mysql-crud-core';
 import { ApiException } from '@src/exceptions';
 import { StaffLevel } from '@src/enum';
 import { ApiHeader, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { StaffBase } from '@database/staff.database';
 import {
     StaffDetailDV,
     StaffListDV,
