@@ -17,6 +17,7 @@ export type StaffSelect = StaffModel['selete'] extends (
 ) => unknown
     ? R
     : any;
+
 @Injectable()
 export class StaffService extends SignService {
     constructor(model: StaffModel, imageModel: ImageModel) {
@@ -126,7 +127,7 @@ export class StaffService extends SignService {
 
         /** 组装员工数据 */
         const codePass = this.codePassworld(name, password);
-        const status = StaffStatusEnum.CREATEED;
+        const status = data.status ?? StaffStatusEnum.CREATEED;
         const newStaff = {
             name,
             password: codePass,

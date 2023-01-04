@@ -14,6 +14,7 @@ import { TokenService } from '@src/modules/token.service';
 import {
     StaffCreateDTO,
     StaffLoginDTO,
+    StaffPartiaListParamDTO,
     StaffRePasswordDTO,
     StaffUpdateDTO,
 } from './staff.dto';
@@ -22,7 +23,18 @@ import { OP } from 'mysql-crud-core/enum';
 import { WhereParmaValue } from 'mysql-crud-core';
 import { ApiException } from '@src/exceptions';
 import { StaffLevel } from '@src/enum';
+import { ApiHeader, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { StaffBase } from '@database/staff.database';
+import {
+    StaffDetailDV,
+    StaffListDV,
+    StaffMessageDV,
+    StaffPropDV,
+    StaffSignDv,
+    StaffTokenDv,
+} from './staff.dataview';
 
+@ApiTags('员工模块')
 @Controller(V1BaseCoontroller.toPrefix('staff'))
 export class StaffController extends V1BaseCoontroller {
     constructor(
@@ -68,7 +80,16 @@ export class StaffController extends V1BaseCoontroller {
 
     /** 获取员工列表 */
     @Get('list')
-    async list(@Query() query, @Headers('token') token: string) {
+    @ApiResponse({
+        status: 200,
+        description: '返回一組常規員工信息列表',
+        type: StaffListDV,
+        isArray: true,
+    })
+    async list(
+        @Query() query: StaffPartiaListParamDTO,
+        @Headers('token') token: string,
+    ) {
         const option = await this.codeQueryList(query, token);
         const list = this.staffService.list(option);
         return list;
@@ -76,7 +97,16 @@ export class StaffController extends V1BaseCoontroller {
 
     /** 获取回收列表 */
     @Get('recall')
-    async reacallList(@Query() query, @Headers('token') token: string) {
+    @ApiResponse({
+        status: 200,
+        description: '一組回收列表中的員工',
+        type: StaffListDV,
+        isArray: true,
+    })
+    async reacallList(
+        @Query() query: StaffPartiaListParamDTO,
+        @Headers('token') token: string,
+    ) {
         const option = await this.codeQueryList(query, token);
         option.where.and.delete_date = [OP.NEQ, null];
         const list = this.staffService.list(option);
@@ -84,9 +114,17 @@ export class StaffController extends V1BaseCoontroller {
     }
 
     /** 軟刪除員工 */
+    @ApiResponse({
+        status: 200,
+        description: '根據傳入的staff_ids, 將員工放入回收列表中',
+        type: StaffMessageDV,
+    })
+    @ApiParam({
+        name: 'staff_ids',
+        description: '員工id1, 員工id2',
+    })
     @Delete('delete/:staff_ids')
     async del(@Param('staff_ids') staffIds: string) {
-        console.log(staffIds);
         const ids = this.toNumberIds(staffIds);
         const { staffService } = this;
         await staffService.del(...ids);
@@ -94,9 +132,18 @@ export class StaffController extends V1BaseCoontroller {
     }
 
     /** 硬刪除員工 */
+    @ApiResponse({
+        status: 200,
+        description:
+            '根據傳入的staff_ids, 將員工在數據庫中進行銷毀。操作不可逆',
+        type: StaffMessageDV,
+    })
+    @ApiParam({
+        name: 'staff_ids',
+        description: '員工id1, 員工id2',
+    })
     @Delete('destroy/:staff_ids')
     async destroy(@Param('staff_ids') staffIds: string) {
-        console.log(staffIds);
         const ids = this.toNumberIds(staffIds);
         const { staffService } = this;
         await staffService.destroy(...ids);
@@ -104,6 +151,15 @@ export class StaffController extends V1BaseCoontroller {
     }
 
     /** 復原員工 */
+    @ApiResponse({
+        status: 200,
+        description: '根據傳入的staff_ids, 將員工從回收列表中恢復',
+        type: StaffMessageDV,
+    })
+    @ApiParam({
+        name: 'staff_ids',
+        description: '員工id1, 員工id2',
+    })
     @Patch('recall/:staff_ids')
     async recall(@Param('staff_ids') staffIds: string) {
         const ids = this.toNumberIds(staffIds);
@@ -113,6 +169,11 @@ export class StaffController extends V1BaseCoontroller {
     }
 
     /** 返回員工的配置屬性 */
+    @ApiResponse({
+        status: 200,
+        description: '返回員工信息的可配置選項',
+        type: StaffPropDV,
+    })
     @Get('prop')
     async getStaffProp(switchLevel?: number) {
         const level = await this.staffService.getSwitchByLevel(
@@ -124,6 +185,15 @@ export class StaffController extends V1BaseCoontroller {
 
     /** 获取指定id员工信息 */
     @Get('data/:staff_id')
+    @ApiResponse({
+        status: 200,
+        description: '根據傳入的staff_id, 返回指定的員工信息',
+        type: StaffDetailDV,
+    })
+    @ApiParam({
+        name: 'staff_id',
+        description: '員工id',
+    })
     async getStaffByID(
         @Param('staff_id') staffId: number,
         @Headers('token') token: string,
@@ -138,6 +208,11 @@ export class StaffController extends V1BaseCoontroller {
     }
 
     /** 获取当前登录的员工信息 */
+    @ApiResponse({
+        status: 200,
+        description: '返回當前登錄的員工信息',
+        type: StaffDetailDV,
+    })
     @Get('get')
     async getCurrentStaff(@Headers('token') token: string) {
         const staff = await this.tokenService.getByStaffByToken(token);
@@ -146,6 +221,11 @@ export class StaffController extends V1BaseCoontroller {
     }
 
     /** 注冊新員工 */
+    @ApiResponse({
+        status: 200,
+        description: '注冊新員工',
+        type: StaffMessageDV,
+    })
     @Post('add')
     async create(@Body() body: StaffCreateDTO) {
         await this.staffService.createStaff(body);
@@ -153,6 +233,11 @@ export class StaffController extends V1BaseCoontroller {
     }
 
     /** 用户登录 */
+    @ApiResponse({
+        status: 200,
+        description: '用户登录',
+        type: StaffSignDv,
+    })
     @Post('login')
     async login(@Body() post: StaffLoginDTO, @Headers('User-Agent') ua) {
         const { staffService } = this;
@@ -162,6 +247,15 @@ export class StaffController extends V1BaseCoontroller {
     }
 
     /** 修改 */
+    @ApiResponse({
+        status: 200,
+        description: '修改用戶信息, 傳入創建時的對應字段更新',
+        type: StaffMessageDV,
+    })
+    @ApiParam({
+        name: 'staff_id',
+        description: '員工id',
+    })
     @Put('edit/:staff_id')
     async edit(
         @Headers('token') token: string,
@@ -176,6 +270,15 @@ export class StaffController extends V1BaseCoontroller {
     }
 
     /** 重置密码 */
+    @ApiResponse({
+        status: 200,
+        description: '修改密碼',
+        type: StaffMessageDV,
+    })
+    @ApiParam({
+        name: 'staff_id',
+        description: '員工id',
+    })
     @Put('re_password/:staff_id')
     async rePass(
         @Headers('token') token: string,
@@ -190,12 +293,21 @@ export class StaffController extends V1BaseCoontroller {
     }
 
     /** 颁发临时token */
+    @ApiResponse({
+        status: 200,
+        description: '獲取臨時的token，用於接口調用',
+        type: StaffTokenDv,
+    })
+    @ApiHeader({
+        name: 'sign',
+        description: '員工登錄后返回的sign信息',
+    })
     @Get('token')
     async token(@Headers('sign') sign: string, @Headers('User-Agent') ua) {
         const { staffService, tokenService } = this;
         const staffData = await staffService.decodeLoginSign(sign, ua ?? '');
-        const tokenData = tokenService.create(staffData);
-        return { tokenData };
+        const token = tokenService.create(staffData);
+        return { token };
     }
 
     private async touchStaffDataByCurrentStaff(
