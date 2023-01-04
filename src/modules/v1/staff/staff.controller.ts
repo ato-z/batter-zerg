@@ -61,7 +61,7 @@ export class StaffController extends V1BaseCoontroller {
 
         // 只允许查询比自己低一级的员工
         const staff = await this.tokenService.getByStaffByToken(token);
-        const { level } = await staff.toJSON();
+        const { level } = staff.data;
 
         return {
             limit: [start, end],
@@ -247,10 +247,14 @@ export class StaffController extends V1BaseCoontroller {
         @Param('staff_id') staffId: number,
         @Body() updata: StaffUpdateDTO,
     ) {
-        const { findStaffData, currentStaffData } =
+        const { findStaff, currentStaff } =
             await this.touchStaffDataByCurrentStaff(token, staffId);
         const { staffService } = this;
-        await staffService.updataStaff(findStaffData, currentStaffData, updata);
+        await staffService.updataStaff(
+            findStaff.data,
+            currentStaff.data,
+            updata,
+        );
         return { message: '更新成功~' };
     }
 
@@ -270,10 +274,14 @@ export class StaffController extends V1BaseCoontroller {
         @Param('staff_id') staffId: number,
         @Body() updata: StaffRePasswordDTO,
     ) {
-        const { findStaffData, currentStaffData } =
+        const { findStaff, currentStaff } =
             await this.touchStaffDataByCurrentStaff(token, staffId);
         const { staffService } = this;
-        await staffService.updataStaff(findStaffData, currentStaffData, updata);
+        await staffService.updataStaff(
+            findStaff.data,
+            currentStaff.data,
+            updata,
+        );
         return { message: '密码已更换~' };
     }
 
@@ -316,14 +324,12 @@ export class StaffController extends V1BaseCoontroller {
         touchStaffId: number,
     ) {
         const currentStaff = await this.tokenService.getByStaffByToken(token);
-        const currentStaffData = await currentStaff.toJSON();
         const findStaff = await this.staffService.getStaffByID(touchStaffId);
-        const findStaffData = await findStaff.toJSON();
         if (
-            findStaffData.id !== currentStaffData.id &&
-            findStaffData.level >= currentStaffData.level
+            findStaff.data.id !== currentStaff.data.id &&
+            findStaff.data.level >= currentStaff.data.level
         )
             throw new ApiException('非法訪問');
-        return { findStaff, currentStaff, findStaffData, currentStaffData };
+        return { findStaff, currentStaff };
     }
 }
