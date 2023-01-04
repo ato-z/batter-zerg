@@ -11,5 +11,6 @@ export type MenuBase = {
 };
 @Injectable()
 export class MenuModel extends BaseModel<MenuBase> {
-    protected tableName = 'schools';
+    protected tableName = 'menu';
+    hideing: Array<keyof MenuBase> = ['id'];
 }
