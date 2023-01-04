@@ -6,14 +6,29 @@ import {
 } from '@nestjs/common';
 import { ApiException } from './exceptions';
 
+function queryTransform<T extends object>(query: T) {
+    const entries: Array<[string, unknown]> = [];
+    for (const key in query) {
+        if (!Object.hasOwn(query, key)) continue;
+        const val: unknown = query[key];
+        entries.push([
+            key,
+            /^\d+$/.test(val as string) ? +query[key] : query[key],
+        ]);
+    }
+    return Object.fromEntries(entries);
+}
+
 export class AppValidationPipe extends ValidationPipe {
     constructor(options?: ValidationPipeOptions) {
         super(options);
     }
 
-    async transform(value: unknown, metadata: ArgumentMetadata) {
+    async transform(value: object, metadata: ArgumentMetadata) {
         try {
-            const result = await super.transform(value, metadata);
+            const transformData =
+                metadata.type === 'query' ? queryTransform(value) : value;
+            const result = await super.transform(transformData, metadata);
             return result;
         } catch (err: unknown) {
             if (err instanceof BadRequestException) {
