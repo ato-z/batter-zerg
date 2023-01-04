@@ -11,12 +11,19 @@ import {
     Put,
     Query,
 } from '@nestjs/common';
+import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiException } from '@src/exceptions';
 import { V1BaseCoontroller } from '@v1/base.controller';
 import { OP } from 'mysql-crud-core/enum';
-import { SchoolCreateDTO, SchoolUpdateDTO } from './scholl.dto';
+import {
+    SchoolCreateDTO,
+    SchoolListParam,
+    SchoolUpdateDTO,
+} from './scholl.dto';
+import { SchoolItemDV, SchoolMessageDV } from './school.dataview';
 import { SchoolService } from './school.service';
 
+@ApiTags('學校模塊')
 @Controller(V1BaseCoontroller.toPrefix('school'))
 export class SchoolController extends V1BaseCoontroller {
     protected hidden: Array<keyof SchoolBase & string> = ['delete_date'];
@@ -25,6 +32,12 @@ export class SchoolController extends V1BaseCoontroller {
     }
 
     /** 普通列表 */
+    @ApiResponse({
+        status: 200,
+        description: '學校列表',
+        type: SchoolItemDV,
+        isArray: true,
+    })
     @Get('list')
     async list(@Query() query) {
         const { start = 0, end = 10, name } = query;
@@ -42,6 +55,15 @@ export class SchoolController extends V1BaseCoontroller {
     }
 
     /** 查看詳情 */
+    @ApiResponse({
+        status: 200,
+        description: '學校詳情',
+        type: SchoolItemDV,
+    })
+    @ApiParam({
+        name: 'school_id',
+        description: '學校id',
+    })
     @Get('data/:school_id')
     async detail(@Param('school_id') schoolId: number) {
         const school = await this.schoolService.findSchool(schoolId);
@@ -51,14 +73,32 @@ export class SchoolController extends V1BaseCoontroller {
     }
 
     /** 新增学校 */
+    @ApiResponse({
+        status: 200,
+        description: '新增學校',
+        type: SchoolMessageDV,
+    })
+    @ApiParam({
+        name: 'school_id',
+        description: '學校id',
+    })
     @Post('add')
     async add(@Body() body: SchoolCreateDTO) {
         const { schoolService } = this;
-        const school = await schoolService.create(body);
-        return school;
+        await schoolService.create(body);
+        return { message: '已添加' };
     }
 
     /** 编辑学校 */
+    @ApiResponse({
+        status: 200,
+        description: '學校編輯, 傳入新增對應字段進行更新',
+        type: SchoolMessageDV,
+    })
+    @ApiParam({
+        name: 'school_id',
+        description: '學校id',
+    })
     @Put('edit/:school_id')
     async put(
         @Body() body: SchoolUpdateDTO,
@@ -70,6 +110,15 @@ export class SchoolController extends V1BaseCoontroller {
     }
 
     /** 刪除學校 */
+    @ApiResponse({
+        status: 200,
+        description: '將一組學校放入回收列表中',
+        type: SchoolMessageDV,
+    })
+    @ApiParam({
+        name: 'school_ids',
+        description: '學校id1,學校id2,...',
+    })
     @Delete('delete/:school_ids')
     async del(@Param('school_ids') schoolIds: string) {
         const ids = this.toNumberIds(schoolIds);
@@ -79,6 +128,15 @@ export class SchoolController extends V1BaseCoontroller {
     }
 
     /** 物理销毁 */
+    @ApiResponse({
+        status: 200,
+        description: '將一組學校永久銷毀，操作不可逆',
+        type: SchoolMessageDV,
+    })
+    @ApiParam({
+        name: 'school_ids',
+        description: '學校id1,學校id2,...',
+    })
     @Delete('destroy/:school_ids')
     async destroy(@Param('school_ids') schoolIds: string) {
         const { schoolService } = this;
@@ -93,8 +151,14 @@ export class SchoolController extends V1BaseCoontroller {
     }
 
     /** 回收列表 */
+    @ApiResponse({
+        status: 200,
+        description: '返回一組回收列表中的數據',
+        type: SchoolItemDV,
+        isArray: true,
+    })
     @Get('recall')
-    async recallList(@Query() query) {
+    async recallList(@Query() query: SchoolListParam) {
         const { start = 0, end = 10, name } = query;
 
         const result = this.schoolService.list({
@@ -110,6 +174,15 @@ export class SchoolController extends V1BaseCoontroller {
     }
 
     /** 復原學校 */
+    @ApiResponse({
+        status: 200,
+        description: '將一組學校從回收列表中恢復',
+        type: SchoolMessageDV,
+    })
+    @ApiParam({
+        name: 'school_ids',
+        description: '學校id1,學校id2,...',
+    })
     @Patch('recall/:school_ids')
     async recall(@Param('school_ids') schoolIds: string) {
         const ids = this.toNumberIds(schoolIds);
