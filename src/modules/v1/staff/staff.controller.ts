@@ -231,20 +231,6 @@ export class StaffController extends V1BaseCoontroller {
         return { message: '已添加' };
     }
 
-    /** 用户登录 */
-    @ApiResponse({
-        status: 200,
-        description: '用户登录',
-        type: StaffSignDv,
-    })
-    @Post('login')
-    async login(@Body() post: StaffLoginDTO, @Headers('User-Agent') ua) {
-        const { staffService } = this;
-        const staffData = await staffService.login(post.name, post.password);
-        const sign = await staffService.createSign(staffData, ua ?? '');
-        return { sign };
-    }
-
     /** 修改 */
     @ApiResponse({
         status: 200,
@@ -291,7 +277,23 @@ export class StaffController extends V1BaseCoontroller {
         return { message: '密码已更换~' };
     }
 
+    /** 用户登录 */
+    @ApiTags('公共模塊')
+    @ApiResponse({
+        status: 200,
+        description: '員工登录，返回一段sign碼',
+        type: StaffSignDv,
+    })
+    @Post('login')
+    async login(@Body() post: StaffLoginDTO, @Headers('User-Agent') ua) {
+        const { staffService } = this;
+        const staffData = await staffService.login(post.name, post.password);
+        const sign = await staffService.createSign(staffData, ua ?? '');
+        return { sign };
+    }
+
     /** 颁发临时token */
+    @ApiTags('公共模塊')
     @ApiResponse({
         status: 200,
         description: '獲取臨時的token，用於接口調用',
