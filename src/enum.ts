@@ -27,3 +27,21 @@ export enum StaffLevel {
     // 超级管理员
     SUPER_ADMIN = 255,
 }
+
+export enum GoodsSwitchType {
+    // 交換
+    ALTERNATE = 1,
+    // 免費
+    FREE = 2,
+}
+
+export enum GoodsStatus {
+    // 下架
+    OUT = -1,
+
+    // 新創建，需審核上綫
+    CREATE = 0,
+
+    // 上架中
+    ONLINE = 1,
+}
