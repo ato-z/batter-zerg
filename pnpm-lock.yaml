@@ -23,8 +23,8 @@ specifiers:
   imagesize: ^1.0.0
   jest: 28.1.3
   mysql: ^2.18.1
-  mysql-crud-core: ^1.0.8
-  mysql-crud-model: ^1.1.9
+  mysql-crud-core: ^1.0.10
+  mysql-crud-model: ^1.1.10
   prettier: ^2.3.2
   reflect-metadata: ^0.1.13
   rimraf: ^3.0.2
@@ -49,8 +49,8 @@ dependencies:
   class-validator: 0.14.0
   imagesize: 1.0.0
   mysql: 2.18.1
-  mysql-crud-core: 1.0.8
-  mysql-crud-model: 1.1.9
+  mysql-crud-core: 1.0.10
+  mysql-crud-model: 1.1.10
   reflect-metadata: 0.1.13
   rimraf: 3.0.2
   rxjs: 7.8.0
@@ -3770,12 +3770,12 @@ packages:
     resolution: {integrity: sha512-nnbWWOkoWyUsTjKrhgD0dcz22mdkSnpYqbEjIm2nhwhuxlSkpywJmBo8h0ZqJdkp73mb90SssHkN4rsRaBAfAA==}
     dev: true
 
-  /mysql-crud-core/1.0.8:
-    resolution: {integrity: sha512-8xfQ0P4RhUQ9XeBFHHCLSymRqZwJi82fSTVqXKj5xV+r3a+7HqqO2ZzIIe9xwC3RI65tXcpaj9VJPVgQD2Pp5g==}
+  /mysql-crud-core/1.0.10:
+    resolution: {integrity: sha512-7+XEuCaCIklfic1Uo5rH/3TVC0jmxsmKlM/PgcQR9vhNJ8EROpFDX2+BoiwRcslUSvi736zIPsEyKnqQ4rJxqw==}
     dev: false
 
-  /mysql-crud-model/1.1.9:
-    resolution: {integrity: sha512-ElJlp/Nifqw9wiYVL4mU7DLONuWq9gWrEHKPCl3OM6ITxxlYD7Lup5un2SvEFMxPsBPhHJUe8CcU58AIxAG8Cg==}
+  /mysql-crud-model/1.1.10:
+    resolution: {integrity: sha512-MV8HPA7zHvZfzOjuYTRFCXDVcp9np4ifJN8Xf4PzDwEInIYtQyK4mH+IQU001P1RXQapAtHO4sDyvmNOethIJA==}
     dev: false
 
   /mysql/2.18.1:
