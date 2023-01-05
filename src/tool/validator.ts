@@ -9,8 +9,10 @@ export const IsImgId = (validationOptions?: ValidationOptions) => {
         {
             name: 'IsImgID',
             validator: {
-                validate: async (id: number) =>
-                    (await imageModel.find(id)) !== null,
+                validate: async (id?: number) => {
+                    if (id === undefined) return false;
+                    return (await imageModel.find(id)) !== null;
+                },
                 defaultMessage: buildMessage(
                     (eachPrefix) => eachPrefix + '$property 圖像并不存在',
                     validationOptions,
