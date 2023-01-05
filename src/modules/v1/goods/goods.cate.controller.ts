@@ -25,7 +25,7 @@ import {
 } from './goods.dataview';
 
 @ApiTags('商品分類')
-@Controller(V1BaseCoontroller.toPrefix('goods/cate'))
+@Controller(V1BaseCoontroller.toPrefix('goods_cate'))
 export class GoodsCateController extends V1BaseCoontroller {
     constructor(private readonly goodsCateServive: GoodsCateService) {
         super();
