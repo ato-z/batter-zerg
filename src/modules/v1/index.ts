@@ -4,6 +4,7 @@ import { V1MenuModule } from './menu';
 import { V1SchoolModule } from './school';
 import { V1StaffModule } from './staff';
 import { V1UploadModule } from './upload';
+import { V1UserModule } from './user';
 
 @Module({
     imports: [
@@ -12,8 +13,7 @@ import { V1UploadModule } from './upload';
         V1SchoolModule,
         V1MenuModule,
         V1GoodsModule,
+        V1UserModule,
     ],
-    controllers: [],
-    providers: [],
 })
 export class V1Module {}
