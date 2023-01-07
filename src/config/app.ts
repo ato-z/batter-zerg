@@ -31,4 +31,6 @@ export const appConfig = {
         /** 當前主aip版本 */
         version: 'v1',
     },
+    /** 后台发布物品时的默认用户id */
+    postGoodsUID: 1,
 };
