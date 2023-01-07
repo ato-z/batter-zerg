@@ -1,6 +1,6 @@
 import { GoodsCateModel } from '@database/good.cate.databse';
 import { GoodsModel } from '@database/goods.database';
-import { GoodsLikeModel } from '@database/goods.llike.database';
+import { GoodsLikeModel } from '@database/goods.like.database';
 import { GoodsObserveModel } from '@database/goods.observe.database';
 import { GoodsTagModel } from '@database/goods.tag.database';
 import { UserModel } from '@database/user.database';

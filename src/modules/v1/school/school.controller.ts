@@ -11,7 +11,7 @@ import {
     Put,
     Query,
 } from '@nestjs/common';
-import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiHeader, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiException } from '@src/exceptions';
 import { V1BaseCoontroller } from '@v1/base.controller';
 import { OP } from 'mysql-crud-core/enum';
@@ -32,6 +32,11 @@ export class SchoolController extends V1BaseCoontroller {
     }
 
     /** 普通列表 */
+    @ApiHeader({
+        name: 'token',
+        description: '臨時密鑰',
+        required: true,
+    })
     @ApiResponse({
         status: 200,
         description: '學校列表',
@@ -54,6 +59,11 @@ export class SchoolController extends V1BaseCoontroller {
     }
 
     /** 查看詳情 */
+    @ApiHeader({
+        name: 'token',
+        description: '臨時密鑰',
+        required: true,
+    })
     @ApiResponse({
         status: 200,
         description: '學校詳情',
@@ -72,6 +82,11 @@ export class SchoolController extends V1BaseCoontroller {
     }
 
     /** 新增学校 */
+    @ApiHeader({
+        name: 'token',
+        description: '臨時密鑰',
+        required: true,
+    })
     @ApiResponse({
         status: 200,
         description: '新增學校',
@@ -89,6 +104,11 @@ export class SchoolController extends V1BaseCoontroller {
     }
 
     /** 编辑学校 */
+    @ApiHeader({
+        name: 'token',
+        description: '臨時密鑰',
+        required: true,
+    })
     @ApiResponse({
         status: 200,
         description: '學校編輯, 傳入新增對應字段進行更新',
@@ -109,6 +129,11 @@ export class SchoolController extends V1BaseCoontroller {
     }
 
     /** 刪除學校 */
+    @ApiHeader({
+        name: 'token',
+        description: '臨時密鑰',
+        required: true,
+    })
     @ApiResponse({
         status: 200,
         description: '將一組學校放入回收列表中',
@@ -127,6 +152,11 @@ export class SchoolController extends V1BaseCoontroller {
     }
 
     /** 物理销毁 */
+    @ApiHeader({
+        name: 'token',
+        description: '臨時密鑰',
+        required: true,
+    })
     @ApiResponse({
         status: 200,
         description: '將一組學校永久銷毀，操作不可逆',
@@ -150,6 +180,11 @@ export class SchoolController extends V1BaseCoontroller {
     }
 
     /** 回收列表 */
+    @ApiHeader({
+        name: 'token',
+        description: '臨時密鑰',
+        required: true,
+    })
     @ApiResponse({
         status: 200,
         description: '返回一組回收列表中的數據',
@@ -173,6 +208,11 @@ export class SchoolController extends V1BaseCoontroller {
     }
 
     /** 復原學校 */
+    @ApiHeader({
+        name: 'token',
+        description: '臨時密鑰',
+        required: true,
+    })
     @ApiResponse({
         status: 200,
         description: '將一組學校從回收列表中恢復',

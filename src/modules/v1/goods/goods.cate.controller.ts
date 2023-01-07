@@ -9,7 +9,13 @@ import {
     Put,
     Query,
 } from '@nestjs/common';
-import { ApiBody, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+    ApiBody,
+    ApiHeader,
+    ApiParam,
+    ApiResponse,
+    ApiTags,
+} from '@nestjs/swagger';
 import { V1BaseCoontroller } from '@v1/base.controller';
 import { OP } from 'mysql-crud-core/enum';
 import {
@@ -53,6 +59,11 @@ export class GoodsCateController extends V1BaseCoontroller {
         return option;
     }
 
+    @ApiHeader({
+        name: 'token',
+        description: '臨時密鑰',
+        required: true,
+    })
     @ApiResponse({
         description: '返回一組分類列表',
         type: GoodsCateListDV,
@@ -65,6 +76,11 @@ export class GoodsCateController extends V1BaseCoontroller {
         return result;
     }
 
+    @ApiHeader({
+        name: 'token',
+        description: '臨時密鑰',
+        required: true,
+    })
     @ApiResponse({
         description: '從回收站中返回一組分類列表',
         type: GoodsCateListDV,
@@ -77,6 +93,11 @@ export class GoodsCateController extends V1BaseCoontroller {
         return result;
     }
 
+    @ApiHeader({
+        name: 'token',
+        description: '臨時密鑰',
+        required: true,
+    })
     @ApiResponse({
         status: 200,
         description: '新增商品分類',
@@ -88,6 +109,11 @@ export class GoodsCateController extends V1BaseCoontroller {
         return { message: '新增成功' };
     }
 
+    @ApiHeader({
+        name: 'token',
+        description: '臨時密鑰',
+        required: true,
+    })
     @ApiResponse({
         status: 200,
         description: '獲取商品分类詳情',
@@ -114,6 +140,11 @@ export class GoodsCateController extends V1BaseCoontroller {
         return cateData;
     }
 
+    @ApiHeader({
+        name: 'token',
+        description: '臨時密鑰',
+        required: true,
+    })
     @ApiResponse({
         status: 200,
         description: '编辑商品分类, 传入更新字段',
@@ -136,6 +167,11 @@ export class GoodsCateController extends V1BaseCoontroller {
         return { message: '已更新' };
     }
 
+    @ApiHeader({
+        name: 'token',
+        description: '臨時密鑰',
+        required: true,
+    })
     @ApiResponse({
         status: 200,
         description: '將商品加入回收列表',
@@ -152,6 +188,11 @@ export class GoodsCateController extends V1BaseCoontroller {
         return { message: '已移入回收列表' };
     }
 
+    @ApiHeader({
+        name: 'token',
+        description: '臨時密鑰',
+        required: true,
+    })
     @ApiResponse({
         status: 200,
         description: '將商品從回收列表恢復',
@@ -168,6 +209,11 @@ export class GoodsCateController extends V1BaseCoontroller {
         return { message: '已從回收列表中恢復' };
     }
 
+    @ApiHeader({
+        name: 'token',
+        description: '臨時密鑰',
+        required: true,
+    })
     @ApiResponse({
         status: 200,
         description: '將回收列表中的數據進行物理銷毀',

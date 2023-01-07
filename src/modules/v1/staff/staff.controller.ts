@@ -85,6 +85,11 @@ export class StaffController extends V1BaseCoontroller {
         type: StaffListDV,
         isArray: true,
     })
+    @ApiHeader({
+        name: 'token',
+        description: '臨時密鑰',
+        required: true,
+    })
     async list(
         @Query() query: StaffPartiaListParamDTO,
         @Headers('token') token: string,
@@ -102,6 +107,11 @@ export class StaffController extends V1BaseCoontroller {
         type: StaffListDV,
         isArray: true,
     })
+    @ApiHeader({
+        name: 'token',
+        description: '臨時密鑰',
+        required: true,
+    })
     async reacallList(
         @Query() query: StaffPartiaListParamDTO,
         @Headers('token') token: string,
@@ -113,6 +123,11 @@ export class StaffController extends V1BaseCoontroller {
     }
 
     /** 軟刪除員工 */
+    @ApiHeader({
+        name: 'token',
+        description: '臨時密鑰',
+        required: true,
+    })
     @ApiResponse({
         status: 200,
         description: '根據傳入的staff_ids, 將員工放入回收列表中',
@@ -131,6 +146,11 @@ export class StaffController extends V1BaseCoontroller {
     }
 
     /** 硬刪除員工 */
+    @ApiHeader({
+        name: 'token',
+        description: '臨時密鑰',
+        required: true,
+    })
     @ApiResponse({
         status: 200,
         description:
@@ -150,6 +170,11 @@ export class StaffController extends V1BaseCoontroller {
     }
 
     /** 復原員工 */
+    @ApiHeader({
+        name: 'token',
+        description: '臨時密鑰',
+        required: true,
+    })
     @ApiResponse({
         status: 200,
         description: '根據傳入的staff_ids, 將員工從回收列表中恢復',
@@ -168,6 +193,11 @@ export class StaffController extends V1BaseCoontroller {
     }
 
     /** 返回員工的配置屬性 */
+    @ApiHeader({
+        name: 'token',
+        description: '臨時密鑰',
+        required: true,
+    })
     @ApiResponse({
         status: 200,
         description: '返回員工信息的可配置選項',
@@ -183,7 +213,11 @@ export class StaffController extends V1BaseCoontroller {
     }
 
     /** 获取指定id员工信息 */
-    @Get('data/:staff_id')
+    @ApiHeader({
+        name: 'token',
+        description: '臨時密鑰',
+        required: true,
+    })
     @ApiResponse({
         status: 200,
         description: '根據傳入的staff_id, 返回指定的員工信息',
@@ -193,6 +227,7 @@ export class StaffController extends V1BaseCoontroller {
         name: 'staff_id',
         description: '員工id',
     })
+    @Get('data/:staff_id')
     async getStaffByID(
         @Param('staff_id') staffId: number,
         @Headers('token') token: string,
@@ -207,6 +242,11 @@ export class StaffController extends V1BaseCoontroller {
     }
 
     /** 获取当前登录的员工信息 */
+    @ApiHeader({
+        name: 'token',
+        description: '臨時密鑰',
+        required: true,
+    })
     @ApiResponse({
         status: 200,
         description: '返回當前登錄的員工信息',
@@ -220,6 +260,11 @@ export class StaffController extends V1BaseCoontroller {
     }
 
     /** 注冊新員工 */
+    @ApiHeader({
+        name: 'token',
+        description: '臨時密鑰',
+        required: true,
+    })
     @ApiResponse({
         status: 200,
         description: '注冊新員工',
@@ -232,6 +277,11 @@ export class StaffController extends V1BaseCoontroller {
     }
 
     /** 修改 */
+    @ApiHeader({
+        name: 'token',
+        description: '臨時密鑰',
+        required: true,
+    })
     @ApiResponse({
         status: 200,
         description: '修改用戶信息, 傳入創建時的對應字段更新',
@@ -259,6 +309,11 @@ export class StaffController extends V1BaseCoontroller {
     }
 
     /** 重置密码 */
+    @ApiHeader({
+        name: 'token',
+        description: '臨時密鑰',
+        required: true,
+    })
     @ApiResponse({
         status: 200,
         description: '修改密碼',
@@ -287,6 +342,11 @@ export class StaffController extends V1BaseCoontroller {
 
     /** 用户登录 */
     @ApiTags('公共模塊')
+    @ApiHeader({
+        name: 'token',
+        description: '臨時密鑰',
+        required: true,
+    })
     @ApiResponse({
         status: 200,
         description: '員工登录，返回一段sign碼',

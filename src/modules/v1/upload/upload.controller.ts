@@ -8,7 +8,7 @@ import { V1BaseCoontroller } from '@v1/base.controller';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ImageService, type imageFile } from './image.service';
 import { ApiException } from '@src/exceptions';
-import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiHeader, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ImageUploadDto } from './image.dto';
 
 @ApiTags('公共模塊')
@@ -18,6 +18,11 @@ export class UploadController extends V1BaseCoontroller {
         super();
     }
 
+    @ApiHeader({
+        name: 'token',
+        description: '臨時密鑰',
+        required: true,
+    })
     @ApiResponse({
         description: '單圖上傳接口',
     })
