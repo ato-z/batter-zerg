@@ -13,7 +13,15 @@ type GoodsTagBase = {
 export class GoodsTagModel extends BaseModel<GoodsTagBase> {
     protected tableName = 'goods_tag';
 
+    async findNamesByIds(ids: Array<string | number>) {
+        const withNames = await this.selete({
+            where: { and: { id: [OP.IN, ids] } },
+        });
+        return withNames.map((item) => item.data.name);
+    }
+
     async findOrCreateNames(names: string[]) {
+        if (names.length === 0) return '';
         const withNames = names.map((name) => name.trim());
         const findNames =
             (
