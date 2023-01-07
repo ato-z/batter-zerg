@@ -1,5 +1,5 @@
 import { ApiProperty, OmitType, PickType } from '@nestjs/swagger';
-import { UserDetailDV } from '@v1/user/user.dataview';
+import { SimpleUserDV, UserDetailDV } from '@v1/user/user.dataview';
 
 export class GoodsMessageDV {
     @ApiProperty({
@@ -48,17 +48,6 @@ export class GoodsCateListDV {
 
     @ApiProperty()
     total: number;
-}
-
-class SimpleUserDV {
-    @ApiProperty({ description: '用戶id' })
-    id: number;
-
-    @ApiProperty({ description: '封面圖' })
-    avatar: string;
-
-    @ApiProperty({ description: '昵稱' })
-    nickname: string;
 }
 
 export class GoodsItemDV {
