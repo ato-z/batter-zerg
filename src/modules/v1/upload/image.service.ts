@@ -42,7 +42,7 @@ export class ImageService {
 
         // 保存到数据库
         const insertId = await this.saveImageInDb({
-            path: path,
+            path,
             width,
             height,
             size: img.size,
@@ -77,7 +77,6 @@ export class ImageService {
             `${date.getFullYear().toString()}-${fillZero(date.getMonth() + 1)}`,
         );
         const localPath = pathJoin(staticConfig.root, servicePath);
-        console.log(localPath);
         touchPath(localPath);
         return {
             localPath,
