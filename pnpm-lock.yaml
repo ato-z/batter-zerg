@@ -24,7 +24,7 @@ specifiers:
   jest: 28.1.3
   mysql: ^2.18.1
   mysql-crud-core: ^1.0.10
-  mysql-crud-model: ^1.1.10
+  mysql-crud-model: ^1.1.11
   prettier: ^2.3.2
   reflect-metadata: ^0.1.13
   rimraf: ^3.0.2
@@ -50,7 +50,7 @@ dependencies:
   imagesize: 1.0.0
   mysql: 2.18.1
   mysql-crud-core: 1.0.10
-  mysql-crud-model: 1.1.10
+  mysql-crud-model: 1.1.11
   reflect-metadata: 0.1.13
   rimraf: 3.0.2
   rxjs: 7.8.0
@@ -3774,8 +3774,8 @@ packages:
     resolution: {integrity: sha512-7+XEuCaCIklfic1Uo5rH/3TVC0jmxsmKlM/PgcQR9vhNJ8EROpFDX2+BoiwRcslUSvi736zIPsEyKnqQ4rJxqw==}
     dev: false
 
-  /mysql-crud-model/1.1.10:
-    resolution: {integrity: sha512-MV8HPA7zHvZfzOjuYTRFCXDVcp9np4ifJN8Xf4PzDwEInIYtQyK4mH+IQU001P1RXQapAtHO4sDyvmNOethIJA==}
+  /mysql-crud-model/1.1.11:
+    resolution: {integrity: sha512-ZJ/evLQ3uf4c/Yd4kkGFKvmBaAKaisGx4XQM4cPtfPuN3WuLTxK5XQJxHpn5Ue8+NgXoLLB2wJmm/vTozGg17Q==}
     dev: false
 
   /mysql/2.18.1:
