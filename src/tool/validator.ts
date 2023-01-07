@@ -32,6 +32,7 @@ export const withGoodsCatePid = (validationOptions?: ValidationOptions) => {
             name: 'withGoodsCatePid',
             validator: {
                 validate: async (id: number) => {
+                    if (id === undefined) return false;
                     if (id === 0) return true;
                     const cate = await goodsCateModel.find(id);
                     return cate !== null;
