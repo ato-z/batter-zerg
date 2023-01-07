@@ -1,23 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { type } from 'os';
 import { BaseModel } from './base.database';
 import { ImageModel } from './image.databser';
 import { SchoolModel } from './school.database';
 
 export type UserBase = {
     id: number;
-    openid: string;
-    union_id: string;
-    schools_id: string;
-    nickname: string;
-    avatar: number;
+    open_id: string;
+    union_id: string | null;
+    schools_id: string | null;
+    nickname: string | null;
+    avatar: number | null;
     gender: 0 | 1 | 2;
-    city: string;
-    province: string;
-    country: string;
-    mobile: string;
+    city: string | null;
+    province: string | null;
+    country: string | null;
+    mobile: string | null;
     create_date: string;
-    delete_date: string | null;
 };
 export type SimpleUeseBase = Pick<UserBase, 'id' | 'avatar' | 'nickname'>;
 
@@ -41,7 +39,9 @@ export class UserModel extends BaseModel<UserBase> {
     };
 
     async findSchoolByID(schoolsId: number | string) {
+        if (schoolsId === null) return null;
         const school = await schoolsModel.find(schoolsId);
+        if (school === null) return null;
         return school.data;
     }
 }
