@@ -59,3 +59,14 @@ export enum GoodsObserveStatus {
     // 可見
     ONLINE = 1,
 }
+
+export enum Gender {
+    // 未知
+    UNKONW = 0,
+
+    // 男
+    MAN = 1,
+
+    // 女
+    WOMAN = 2,
+}
