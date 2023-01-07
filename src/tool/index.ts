@@ -27,7 +27,7 @@ export const fillZero = (n: number): string => {
  * const datatime = date('Y年m月d日 h时m分s秒', new Date()) // => 2021年01月05日 10时10分10秒
  * ```
  */
-export const date = function (dateString: string, _date?: Date): string {
+export const date = (dateString: string, _date?: Date) => {
     const reg = /[y|m|d|h|i|s]/gi;
     const date = _date ?? new Date();
     dateString = dateString.replace(reg, (val): string => {
@@ -54,33 +54,31 @@ export const date = function (dateString: string, _date?: Date): string {
 };
 
 /**
- * 判断路径是否存在，不存在则创建
+ * 确认路径是否存在，不存在则创建
  * @param path {string} 路径地址
  * ```
  * const path = '/a/b/c'
  * touchPath(path)
  * ```
  */
-export const touchPath = (path: string): void => {
+export const touchPath = (path: string) => {
     const diffPath: string[] = [];
-    const decodePath = path.split('/');
-    const popHandle = (): void => {
+    const decodePath: string[] = path.split('/');
+    const popHandle = () => {
         try {
-            const currentPath: string = decodePath.join('/');
-            if (decodePath.length > 0) {
-                accessSync(currentPath);
-            }
-        } catch (err) {
-            const diff = decodePath.pop() as string;
+            const currentPath = decodePath.join('/');
+            if (decodePath.length > 0) accessSync(currentPath);
+        } catch {
+            const diff = decodePath.pop();
             diffPath.push(diff);
             popHandle();
         }
     };
     popHandle();
     while (diffPath.length > 0) {
-        const nextDir = diffPath.pop() as string;
+        const nextDir = diffPath.pop();
         decodePath.push(nextDir);
-        const currentPath: string = decodePath.join('/');
+        const currentPath = decodePath.join('/');
         mkdirSync(currentPath);
     }
 };
@@ -96,4 +94,21 @@ export const getImageAttr = (
     const statu = parser.parse(buffer);
     if (Parser.DONE !== statu) return null;
     return parser.getResult();
+};
+
+/**
+ * 過濾空選項
+ * @param data {object}
+ * @returns
+ */
+export const filterEmpty = <T extends object>(data: T) => {
+    const keys = Object.keys(data);
+    const withKeys = keys.filter((key) => {
+        const val = data[key];
+        if (val === 0) return true;
+        return val;
+    });
+    return Object.fromEntries(
+        withKeys.map((key) => [key, data[key]]),
+    ) as Partial<T>;
 };
