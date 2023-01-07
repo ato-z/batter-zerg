@@ -15,7 +15,6 @@ import {
     ApiParam,
     ApiResponse,
     ApiTags,
-    PartialType,
 } from '@nestjs/swagger';
 import { V1BaseCoontroller } from '@v1/base.controller';
 import { OP } from 'mysql-crud-core/enum';

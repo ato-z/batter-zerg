@@ -1,6 +1,6 @@
 import { appConfig } from '@config/app';
 import { GoodsModel } from '@database/goods.database';
-import { GoodsLikeBase, GoodsLikeModel } from '@database/goods.llike.database';
+import { GoodsLikeBase, GoodsLikeModel } from '@database/goods.like.database';
 import {
     GoodsObserveBase,
     GoodsObserveModel,
@@ -8,7 +8,6 @@ import {
 import { GoodsTagModel } from '@database/goods.tag.database';
 import { SimpleUeseBase, UserModel } from '@database/user.database';
 import { Injectable } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
 import { GoodsObserveStatus } from '@src/enum';
 import { ApiException } from '@src/exceptions';
 import { date, filterEmpty } from '@src/tool';
