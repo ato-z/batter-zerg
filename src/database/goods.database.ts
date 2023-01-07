@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { GoodsStatus, GoodsSwitchType } from '@src/enum';
-import { ApiException } from '@src/exceptions';
 import { BaseModel } from './base.database';
 import { GoodsTagModel } from './goods.tag.database';
 import { ImageModel } from './image.databser';
@@ -17,7 +16,7 @@ type GoodsBase = {
     content: string;
     tags: string[] | string;
     create_date: string;
-    detele_date: string | null;
+    delete_date: string | null;
 };
 
 const imageModel = new ImageModel();
@@ -39,9 +38,9 @@ export class GoodsModel extends BaseModel<GoodsBase> {
 
         async tags(val: string | string[]) {
             if (typeof val !== 'string') return [];
-            const tags = await goodsTagModel.findOrCreateNames(
-                val.substring(1).split(','),
-            );
+            const ids = val.split(',').filter((item) => item);
+            if (ids.length === 0) return [];
+            const tags = await goodsTagModel.findNamesByIds(ids);
             return tags;
         },
     };
@@ -51,8 +50,9 @@ export class GoodsModel extends BaseModel<GoodsBase> {
             if (val instanceof Array) {
                 const tags = await goodsTagModel.findOrCreateNames(val);
                 return tags;
+            } else {
+                return '';
             }
-            throw new ApiException('tags 必須為字符串數組');
         },
     };
 }
