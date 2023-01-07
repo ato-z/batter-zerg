@@ -44,4 +44,18 @@ export enum GoodsStatus {
 
     // 上架中
     ONLINE = 1,
+
+    // 正在交换中
+    EXCHANGE = 2,
+
+    // 交易结束
+    OVER = 3,
+}
+
+export enum GoodsObserveStatus {
+    // 新評論， 不可見
+    CREATE = 0,
+
+    // 可見
+    ONLINE = 1,
 }
