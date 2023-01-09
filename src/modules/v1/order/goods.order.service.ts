@@ -5,7 +5,7 @@ import { date, filterEmpty, pickObject } from '@src/tool';
 import type { SelectOption } from '@database/base.database';
 import { GoodsOrderListParamDTO } from './goods.order.dto';
 import { OP } from 'mysql-crud-core/enum';
-import { GoodsModel, type GoodsBase } from '@database/goods.database';
+import { GoodsModel } from '@database/goods.database';
 import { GoodsOrderReacordModel } from '@database/goods.order.record.database';
 
 export type SelectGoodsOrderOption = SelectOption<GoodsOrderModel['selete']>;
