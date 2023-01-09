@@ -4,7 +4,7 @@ import { BaseModel } from './base.database';
 import { GoodsTagModel } from './goods.tag.database';
 import { ImageModel } from './image.databser';
 
-type GoodsBase = {
+export type GoodsBase = {
     id: number;
     uid: number;
     cate_id: number;
