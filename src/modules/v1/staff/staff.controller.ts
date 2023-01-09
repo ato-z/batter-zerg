@@ -342,11 +342,6 @@ export class StaffController extends V1BaseCoontroller {
 
     /** 用户登录 */
     @ApiTags('公共模塊')
-    @ApiHeader({
-        name: 'token',
-        description: '臨時密鑰',
-        required: true,
-    })
     @ApiResponse({
         status: 200,
         description: '員工登录，返回一段sign碼',
