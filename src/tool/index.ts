@@ -112,3 +112,16 @@ export const filterEmpty = <T extends object>(data: T) => {
         withKeys.map((key) => [key, data[key]]),
     ) as Partial<T>;
 };
+
+/**
+ * 选取对象的部分字段并返回一个所选取字段构成的新对象
+ */
+export const pickObject = <T extends object, K extends Array<keyof T>>(
+    data: T,
+    keys: K,
+) => {
+    return Object.fromEntries(keys.map((key) => [key, data[key]])) as Pick<
+        T,
+        K[number]
+    >;
+};
