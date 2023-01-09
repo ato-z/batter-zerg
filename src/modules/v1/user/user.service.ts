@@ -85,6 +85,7 @@ export class UserService {
             const address = await this.userAddressModel.selete({
                 where: { and: { uid: id } },
             });
+            if (address === null) return [];
             return address.map((i) => i.data) ?? [];
         });
 
