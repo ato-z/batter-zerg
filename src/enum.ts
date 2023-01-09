@@ -70,3 +70,17 @@ export enum Gender {
     // 女
     WOMAN = 2,
 }
+
+export enum GoodsOrderState {
+    // 0发起订单
+    CREATE = 0,
+
+    // 1双方统一意见 ,交換中
+    EXCHANGE = 1,
+
+    // 2交换成功
+    SUCCESS = 2,
+
+    // 3交换失败
+    ERROR = 3,
+}
