@@ -1,11 +1,50 @@
 import { MenuBase, MenuModel } from '@database/menu.database';
 import { Injectable } from '@nestjs/common';
+import { date } from '@src/tool';
+import { OP } from 'mysql-crud-core/enum';
+import { MenuCreateDTO, MenuUpdataDTO } from './menu.dto';
 
 @Injectable()
 export class MenuService {
     private tree = null;
 
     constructor(private readonly menuModel: MenuModel) {}
+
+    private withPath(path: string) {
+        const newPath = path.replace(/^\s+|\s+$/g, '');
+        return '/'.concat(newPath.replace(/^\/+|\/+$/g, ''));
+    }
+
+    /** 添加分类 */
+    async add(data: MenuCreateDTO) {
+        data.path = this.withPath(data.path);
+        await this.menuModel.insert(data);
+    }
+
+    /** 編輯分類 */
+    async edit(data: MenuUpdataDTO, menuId: number) {
+        console.log(data);
+        if (data.path) data.path = this.withPath(data.path);
+        await this.menuModel.update(data, {
+            where: { and: { id: menuId } },
+        });
+    }
+
+    /** 刪除分類 */
+    async del(menuIds: number[]) {
+        await this.menuModel.update(
+            {
+                delete_date: date('y-m-d h:i:s'),
+            },
+            {
+                where: {
+                    and: {
+                        id: [OP.IN, menuIds],
+                    },
+                },
+            },
+        );
+    }
 
     async index() {
         if (this.tree !== null) return this.tree;
@@ -27,11 +66,12 @@ export class MenuService {
             },
         });
         if (result === null) return [];
-        const tree = this.codeMenuTree(result.map((item) => item.data));
+        const list = await Promise.all(result.map((item) => item.toJSON()));
+        const tree = this.codeMenuTree(list);
         return tree;
     }
 
-    private codeMenuTree(list: MenuBase[]) {
+    private codeMenuTree(list: { pid: number; id: number }[]) {
         const tree = [];
         const treeMap = {};
         list.forEach((item) => {

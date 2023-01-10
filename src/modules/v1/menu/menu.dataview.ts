@@ -5,3 +5,7 @@ export class MenuItemDV {
     title: string;
 }
 export class MenuTreeDV {}
+
+export class MenuMessageDV {
+    message: string;
+}
