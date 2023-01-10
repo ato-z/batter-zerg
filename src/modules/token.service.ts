@@ -44,10 +44,10 @@ class TokenMap {
 export class TokenService {
     constructor(private readonly staffModel: StaffModel) {}
 
-    static readonly tokenMap = new TokenMap();
+    readonly tokenMap = new TokenMap();
 
     private get(tokenKey: string) {
-        return TokenService.tokenMap.get(tokenKey);
+        return this.tokenMap.get(tokenKey);
     }
 
     create(staff: StaffBase) {
@@ -62,7 +62,7 @@ export class TokenService {
             password,
             expTime,
         };
-        TokenService.tokenMap.set(tokenKey, token);
+        this.tokenMap.set(tokenKey, token);
         return tokenKey;
     }
 
