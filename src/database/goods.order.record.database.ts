@@ -10,6 +10,8 @@ type GoodsOrderReacordBase = {
 export class GoodsOrderReacordModel extends BaseModel<GoodsOrderReacordBase> {
     protected tableName = 'goods_order_record';
 
+    hideing: (keyof GoodsOrderReacordBase)[] = ['id', 'order_id'];
+
     getting = {
         action(action: number) {
             if (action === GoodsOrderState.CREATE) return '創建訂單';
