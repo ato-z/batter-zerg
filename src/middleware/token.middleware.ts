@@ -16,7 +16,6 @@ export class TokenMiddleawre {
             this.tokenService.tokenMap.get(token);
             next();
         } catch (err) {
-            console.log(err);
             if (err instanceof HttpException) {
                 res.statusCode = err.getStatus();
                 res.send(err.getResponse());
