@@ -2,6 +2,7 @@ import { appConfig } from '@config/app';
 import { staticConfig } from '@config/static';
 import { StaffModel, type StaffBase } from '@database/staff.database';
 import { Injectable } from '@nestjs/common';
+import { StaffLevel } from '@src/enum';
 import { TokenMissException } from '@src/exceptions';
 import { readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
@@ -85,5 +86,11 @@ export class TokenService {
         const token = this.get(tokenKey);
         const staff = await staffModel.find(token.id);
         return staff;
+    }
+
+    /** 驗證是否為超級管理員 */
+    hasSuperAdmin(token: string) {
+        const { level } = this.get(token);
+        return level === StaffLevel.SUPER_ADMIN;
     }
 }
