@@ -5,7 +5,6 @@ import { staticConfig } from '@config/static';
 import { touchPath } from './tool';
 import { appConfig } from '@config/app';
 import { AppValidationPipe } from './validation';
-import tokenMiddleware from './middleware/token.middleware';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
@@ -52,9 +51,6 @@ async function bootstrap() {
 
     /** 接入文檔 */
     createSwagger(app);
-
-    /** 开启中间件 */
-    app.use(tokenMiddleware);
 
     await app.listen(appConfig.runPort, appConfig.runIp);
 }
