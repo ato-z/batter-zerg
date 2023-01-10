@@ -1,12 +1,13 @@
 import { MenuModel } from '@database/menu.database';
 import { Injectable } from '@nestjs/common';
+import { StaffLevel } from '@src/enum';
 import { date } from '@src/tool';
 import { OP } from 'mysql-crud-core/enum';
 import { MenuCreateDTO, MenuUpdataDTO } from './menu.dto';
 
 @Injectable()
 export class MenuService {
-    private tree = null;
+    private tree = new Map<StaffLevel, unknown>();
 
     constructor(private readonly menuModel: MenuModel) {}
 
@@ -46,23 +47,23 @@ export class MenuService {
         );
     }
 
-    async index() {
-        if (this.tree !== null) return this.tree;
-        const tree = await this.getIndexByDb();
-        this.tree = tree;
+    async index(level: StaffLevel) {
+        if (this.tree.has(level)) return this.tree.get(level);
+        const tree = await this.getIndexByDb(level);
+        this.tree.set(level, tree);
         return tree;
     }
 
-    async upIndex() {
-        const tree = await this.getIndexByDb();
-        this.tree = tree;
+    async upIndex(level: StaffLevel) {
+        const tree = await this.getIndexByDb(level);
+        this.tree.set(level, tree);
         return tree;
     }
 
-    private async getIndexByDb() {
+    private async getIndexByDb(level: StaffLevel) {
         const result = await this.menuModel.selete({
             where: {
-                and: { delete_date: null },
+                and: { delete_date: null, level: [OP.ELT, level] },
             },
         });
         if (result === null) return [];

@@ -6,23 +6,51 @@ import {
     Param,
     Post,
     Put,
+    Headers,
 } from '@nestjs/common';
 import { ApiHeader, ApiParam, ApiProperty, ApiTags } from '@nestjs/swagger';
+import { StaffLevel } from '@src/enum';
+import { TokenService } from '@src/modules/token.service';
 import { V1BaseCoontroller } from '@v1/base.controller';
-import { MenuMessageDV } from './menu.dataview';
+import { MenuItemDV, MenuMessageDV } from './menu.dataview';
 import { MenuCreateDTO, MenuUpdataDTO } from './menu.dto';
 import { MenuService } from './menu.service';
 
 @ApiTags('菜單模塊')
 @Controller(V1BaseCoontroller.toPrefix('menu'))
 export class MenuController extends V1BaseCoontroller {
-    constructor(private readonly menuService: MenuService) {
+    constructor(
+        private readonly menuService: MenuService,
+        private readonly tokenService: TokenService,
+    ) {
         super();
     }
 
+    @ApiProperty({
+        description: '根據登錄返回對象的菜單列表',
+        type: MenuItemDV,
+        isArray: true,
+    })
+    @Get('get')
+    async get(@Headers('token') token: string) {
+        const { level } = await this.tokenService.tokenMap.get(token);
+        const menu = await this.menuService.index(level);
+        return menu;
+    }
+
+    @ApiProperty({
+        description: '返回所有的菜單列表',
+        type: MenuItemDV,
+        isArray: true,
+    })
+    @ApiHeader({
+        name: 'token',
+        description: '臨時密鑰',
+        required: true,
+    })
     @Get('index')
     async index() {
-        const menu = await this.menuService.index();
+        const menu = await this.menuService.index(StaffLevel.SUPER_ADMIN);
         return menu;
     }
 
