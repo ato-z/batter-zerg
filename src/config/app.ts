@@ -33,4 +33,15 @@ export const appConfig = {
     },
     /** 后台发布物品时的默认用户id */
     postGoodsUID: 1,
+    /** 開放接口白名單 */
+    openApiWhiteList: [
+        'staff/login',
+        'staff/token',
+        'staff/repassword',
+        'staff/edit',
+        'staff/get',
+        'staff/prop',
+        'upload/image',
+        'menu/get',
+    ],
 };
