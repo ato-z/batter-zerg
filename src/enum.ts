@@ -84,3 +84,11 @@ export enum GoodsOrderState {
     // 3交换失败
     ERROR = 3,
 }
+
+export enum Visit {
+    // 禁止
+    BAN = 0,
+
+    // 放行
+    RELEASE = 1,
+}
