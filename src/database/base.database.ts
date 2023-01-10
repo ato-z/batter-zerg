@@ -1,7 +1,6 @@
 import { databaseConfig } from '@config/database';
 import { createPool } from 'mysql';
 import DataBaseModel from 'mysql-crud-model';
-import { ImageModel } from './image.databser';
 
 const { host, port, password, database, user, table_prefix } = databaseConfig;
 const pool = createPool({ host, port, password, database, user });
