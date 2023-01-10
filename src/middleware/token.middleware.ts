@@ -1,4 +1,4 @@
-import { HttpException } from '@nestjs/common';
+import { HttpException, Inject } from '@nestjs/common';
 import { TokenService } from '@src/modules/token.service';
 import { type Request, type Response } from 'express';
 
@@ -6,7 +6,9 @@ import { type Request, type Response } from 'express';
  * token校验中间件
  */
 export class TokenMiddleawre {
-    constructor(private readonly tokenService: TokenService) {}
+    constructor(
+        @Inject(TokenService) private readonly tokenService: TokenService,
+    ) {}
 
     use(req: Request, res: Response, next: () => void) {
         try {
@@ -14,6 +16,7 @@ export class TokenMiddleawre {
             this.tokenService.tokenMap.get(token);
             next();
         } catch (err) {
+            console.log(err);
             if (err instanceof HttpException) {
                 res.statusCode = err.getStatus();
                 res.send(err.getResponse());
