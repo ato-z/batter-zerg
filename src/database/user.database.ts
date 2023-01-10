@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { BaseModel } from './base.database';
-import { ImageModel } from './image.databser';
 import { SchoolModel } from './school.database';
 
 export type UserBase = {
@@ -20,7 +19,6 @@ export type UserBase = {
 export type SimpleUeseBase = Pick<UserBase, 'id' | 'avatar' | 'nickname'>;
 
 const schoolsModel = new SchoolModel();
-const imageModel = new ImageModel();
 
 @Injectable()
 export class UserModel extends BaseModel<UserBase> {
@@ -28,14 +26,7 @@ export class UserModel extends BaseModel<UserBase> {
     hideing: Array<keyof UserBase> = ['schools_id'];
 
     getting = {
-        async avatar(imgId: number) {
-            if (typeof imgId === 'number') {
-                const img = await imageModel.find(imgId);
-                const { path } = await img.toJSON();
-                return path;
-            }
-            return imgId;
-        },
+        avatar: async (imgId: number) => (await this.getImage(imgId))?.path,
     };
 
     async findSchoolByID(schoolsId: number | string) {

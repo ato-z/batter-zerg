@@ -1,5 +1,6 @@
 import { appConfig } from '@config/app';
 import { Injectable } from '@nestjs/common';
+import { ImageFrom } from '@src/enum';
 import { BaseModel } from './base.database';
 
 export type ImageBase = {
@@ -9,7 +10,7 @@ export type ImageBase = {
     height: number;
     size: number;
     color: string | null;
-    from: 1 | 2;
+    from: ImageFrom;
     create_date: string;
 };
 @Injectable()
@@ -18,6 +19,10 @@ export class ImageModel extends BaseModel<ImageBase> {
     hideing: (keyof ImageBase)[] = ['from', 'create_date', 'size'];
 
     getting = {
+        path(path: string, key: 'path', data: ImageBase) {
+            if (data.from === ImageFrom.LOCAL) return path;
+            return path;
+        },
         color(val: string | null) {
             if (val === null) return `#${appConfig.themeImageColor}`;
             return `#${appConfig.themeImageColor}`;

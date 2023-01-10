@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { GoodsStatus, GoodsSwitchType } from '@src/enum';
 import { BaseModel } from './base.database';
 import { GoodsTagModel } from './goods.tag.database';
-import { ImageModel } from './image.databser';
 
 export type GoodsBase = {
     id: number;
@@ -19,7 +18,6 @@ export type GoodsBase = {
     delete_date: string | null;
 };
 
-const imageModel = new ImageModel();
 const goodsTagModel = new GoodsTagModel();
 
 @Injectable()
@@ -27,14 +25,7 @@ export class GoodsModel extends BaseModel<GoodsBase> {
     protected tableName = 'goods';
 
     getting = {
-        async cover(imgId: number) {
-            if (typeof imgId === 'number') {
-                const img = await imageModel.find(imgId);
-                const { path } = await img.toJSON();
-                return path;
-            }
-            return imgId;
-        },
+        cover: async (imgId: number) => (await this.getImage(imgId))?.path,
 
         async tags(val: string | string[]) {
             if (typeof val !== 'string') return [];

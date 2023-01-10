@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { BaseModel } from './base.database';
-import { ImageModel } from './image.databser';
 
 export type StaffBase = {
     id: number;
@@ -14,20 +13,12 @@ export type StaffBase = {
     delete_date: string | null;
 };
 
-const imageModel = new ImageModel();
-
 @Injectable()
 export class StaffModel extends BaseModel<StaffBase> {
     protected tableName = 'staff';
 
     getting = {
-        cover: async (imgId: number | string) => {
-            if (typeof imgId === 'number') {
-                const img = await imageModel.find(imgId);
-                const { path } = await img.toJSON();
-                return path;
-            }
-            return imgId;
-        },
+        cover: async (imgId: number | string) =>
+            (await this.getImage(imgId))?.path,
     };
 }
