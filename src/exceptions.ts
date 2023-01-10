@@ -29,3 +29,9 @@ export class TokenMissException extends ApiException {
         super(message, HttpStatus.FORBIDDEN, 2002);
     }
 }
+
+export class ApiForbidden extends ApiException {
+    constructor(message = '403 Forbidden') {
+        super(message, HttpStatus.FORBIDDEN, 3000);
+    }
+}
