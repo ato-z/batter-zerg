@@ -12,6 +12,9 @@ export enum StaffStatusEnum {
 export enum ImageFrom {
     // 本地
     LOCAL = 1,
+
+    // 七牛云
+    QINIU = 2,
 }
 
 export enum StaffLevel {
