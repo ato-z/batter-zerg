@@ -23,6 +23,18 @@ export class ImageService {
     constructor(private readonly imageModel: ImageModel) {}
 
     /**
+     * 儅圖像上傳到七牛雲時，更新from值
+     */
+    async saveFrom(id: number, from: ImageFrom) {
+        await this.imageModel.update(
+            { from },
+            {
+                where: { and: { id } },
+            },
+        );
+    }
+
+    /**
      * 上传至本地
      */
     async uploadToLocal(img: imageFile) {
@@ -38,7 +50,9 @@ export class ImageService {
         // 先保存到本地服务器
         const { localPath, servicePath } = this.createImageSavePath();
         writeFileSync(pathJoin(localPath, filename), img.buffer);
-        const path = pathJoin(servicePath, filename).replace(/\\|\//g, '\\/');
+        const path = pathJoin(servicePath, filename)
+            .replace(/\\|\//g, '\\/')
+            .replace(/^\\\//, '');
 
         // 保存到数据库
         const insertId = await this.saveImageInDb({

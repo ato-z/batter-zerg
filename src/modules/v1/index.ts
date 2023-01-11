@@ -48,6 +48,12 @@ export class V1Module implements NestModule {
                     path: V1BaseCoontroller.toPrefix('staff/token'),
                     method: RequestMethod.GET,
                 },
+                {
+                    path: V1BaseCoontroller.toPrefix(
+                        'upload/callback/qiniu_image',
+                    ),
+                    method: RequestMethod.ALL,
+                },
             )
             .forRoutes(V1BaseCoontroller.toPrefix(''));
     }

@@ -1,5 +1,8 @@
 import {
+    All,
+    Body,
     Controller,
+    Get,
     Post,
     UploadedFile,
     UseInterceptors,
@@ -9,7 +12,11 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { ImageService, type imageFile } from './image.service';
 import { ApiException } from '@src/exceptions';
 import { ApiBody, ApiHeader, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { ImageUploadDto } from './image.dto';
+import { ImageUploadDTO, ImageQiniuCallbackDTO } from './image.dto';
+import { QiNiuService } from '@src/modules/common/qiniu/qiniu.service';
+import { staticConfig } from '@config/static';
+import { join } from 'path';
+import { ImageFrom } from '@src/enum';
 
 @ApiTags('公共模塊')
 @Controller(V1BaseCoontroller.toPrefix('upload'))
@@ -29,7 +36,7 @@ export class UploadController extends V1BaseCoontroller {
     @ApiBody({
         description:
             'jpg | jpeg | png | gif 文件，如果上傳同一文件將返回上一回結果',
-        type: ImageUploadDto,
+        type: ImageUploadDTO,
     })
     @Post('image')
     @UseInterceptors(FileInterceptor('img'))
@@ -38,5 +45,14 @@ export class UploadController extends V1BaseCoontroller {
         const image = await this.imageService.uploadToLocal(img);
         const imageData = await image.toJSON();
         return imageData;
+    }
+
+    @ApiResponse({
+        description: '七牛雲回調url，黨圖像上傳至七牛雲被動調用',
+    })
+    @All('callback/qiniu_image')
+    async qiniuCallBack(@Body() data: ImageQiniuCallbackDTO) {
+        await this.imageService.saveFrom(data.id, ImageFrom.QINIU);
+        return { message: `IMG: ${data.id} 已更新` };
     }
 }
