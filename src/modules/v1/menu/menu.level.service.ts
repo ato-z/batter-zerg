@@ -1,6 +1,8 @@
 import { SelectOption } from '@database/base.database';
 import { MenuLevelModel } from '@database/menu.level.database';
 import { Injectable } from '@nestjs/common';
+import { StaffLevel, Visit } from '@src/enum';
+import { ApiException } from '@src/exceptions';
 import { date, filterEmpty } from '@src/tool';
 import { OP } from 'mysql-crud-core/enum';
 import {
@@ -16,7 +18,9 @@ export class MenuLevelService {
     constructor(private readonly menuLevelModel: MenuLevelModel) {}
 
     private withModel(model: string) {
-        return model.replace(/^\s+|\s+$/, '');
+        const codeModel = model.replace(/^\s+|\s+$/, '');
+        if (codeModel === '*') throw new ApiException('model 不允许为*');
+        return codeModel;
     }
 
     private codeListParam(
@@ -29,6 +33,8 @@ export class MenuLevelService {
             limit: [filterQuery.start ?? 0, filterQuery.end ?? 10],
             order: ['id', 'DESC'],
         };
+        if (filterQuery.level !== undefined)
+            option.where.and.level = filterQuery.level;
         return option;
     }
 
@@ -44,6 +50,16 @@ export class MenuLevelService {
         const total = this.menuLevelModel.total({ where: option.where });
 
         return { list, total };
+    }
+
+    async getByLevel(level: StaffLevel) {
+        if (level === StaffLevel.SUPER_ADMIN)
+            return [{ title: '超級管理員', model: '*', all: Visit.RELEASE }];
+        const list = await this.menuLevelModel.selete({
+            where: { and: { level, delete_date: null } },
+        });
+        if (list === null) return [];
+        return list.map((i) => i.data);
     }
 
     async add(data: MenuLevelCreateDTO) {

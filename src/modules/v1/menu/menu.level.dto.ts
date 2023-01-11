@@ -23,6 +23,12 @@ export class MenuLevelCreateDTO {
     model: string;
 
     @ApiProperty({
+        description: '任意 请求',
+    })
+    @IsIn([Visit.BAN, Visit.RELEASE])
+    all: Visit;
+
+    @ApiProperty({
         description: 'GET 请求',
     })
     @IsIn([Visit.BAN, Visit.RELEASE])
@@ -56,6 +62,16 @@ export class MenuLevelCreateDTO {
 export class MenuLevelUpdateDTO extends PartialType(MenuLevelCreateDTO) {}
 
 export class MenuLevelListParamDTO {
+    @ApiProperty({
+        description: '权限类型',
+        required: false,
+        default: 0,
+        type: Number,
+    })
+    @IsOptional()
+    @IsIn([StaffLevel.SALESMAN, StaffLevel.SALESMAN, StaffLevel.ADMIN])
+    level: StaffLevel;
+
     @ApiProperty({
         description: '跳過條目',
         required: false,
