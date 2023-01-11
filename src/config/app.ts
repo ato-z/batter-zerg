@@ -42,6 +42,10 @@ export const appConfig = {
         'staff/get',
         'staff/prop',
         'upload/image',
+        'upload/callback/qiniu_image',
         'menu/get',
     ],
+    /** 七牛雲圖片上傳成功回調地址 */
+    qiniuImageUploadCallback:
+        'http://4453919yn5.wicp.vip:59167/v1/upload/callback/qiniu_image',
 };
