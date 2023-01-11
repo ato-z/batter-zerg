@@ -2,7 +2,6 @@ import {
     All,
     Body,
     Controller,
-    Get,
     Post,
     UploadedFile,
     UseInterceptors,
@@ -13,9 +12,6 @@ import { ImageService, type imageFile } from './image.service';
 import { ApiException } from '@src/exceptions';
 import { ApiBody, ApiHeader, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ImageUploadDTO, ImageQiniuCallbackDTO } from './image.dto';
-import { QiNiuService } from '@src/modules/common/qiniu/qiniu.service';
-import { staticConfig } from '@config/static';
-import { join } from 'path';
 import { ImageFrom } from '@src/enum';
 
 @ApiTags('公共模塊')
