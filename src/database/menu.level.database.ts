@@ -1,14 +1,15 @@
-import { StaffLevel } from '@src/enum';
+import { StaffLevel, Visit } from '@src/enum';
 import { BaseModel } from './base.database';
 
 export type MenuLevelBase = {
     id: number;
     model: string;
-    get: number;
-    post: number;
-    delete: number;
-    put: number;
-    patch: number;
+    all: Visit;
+    get: Visit;
+    post: Visit;
+    delete: Visit;
+    put: Visit;
+    patch: Visit;
     level: StaffLevel;
     create_date: string;
     delete_date: string | null;
