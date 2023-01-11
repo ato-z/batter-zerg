@@ -44,6 +44,7 @@ export const appConfig = {
         'upload/image',
         'upload/callback/qiniu_image',
         'menu/get',
+        'config/os',
     ],
     /** 七牛雲圖片上傳成功回調地址 */
     qiniuImageUploadCallback:

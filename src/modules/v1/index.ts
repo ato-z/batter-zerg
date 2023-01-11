@@ -10,6 +10,7 @@ import { TokenMiddleawre } from '@src/middleware/token.middleware';
 import { VerifyStaffLevel } from '@src/middleware/verify.staff.level.middleawre';
 import { TokenService } from '../token.service';
 import { V1BaseCoontroller } from './base.controller';
+import { V1ConfigModule } from './config';
 import { V1GoodsModule } from './goods';
 import { V1MenuModule } from './menu';
 import { V1OrderModule } from './order';
@@ -27,6 +28,7 @@ import { V1UserModule } from './user';
         V1GoodsModule,
         V1UserModule,
         V1OrderModule,
+        V1ConfigModule,
     ],
     providers: [MenuLevelModel, StaffModel, TokenService],
 })
@@ -53,6 +55,10 @@ export class V1Module implements NestModule {
                         'upload/callback/qiniu_image',
                     ),
                     method: RequestMethod.ALL,
+                },
+                {
+                    path: V1BaseCoontroller.toPrefix('config/os'),
+                    method: RequestMethod.GET,
                 },
             )
             .forRoutes(V1BaseCoontroller.toPrefix(''));

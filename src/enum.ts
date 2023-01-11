@@ -95,3 +95,16 @@ export enum Visit {
     // 放行
     RELEASE = 1,
 }
+
+// 0输入框 1switch切換 2文本域 3下拉菜单 4圖片上傳
+export enum ConfigType {
+    INPUT = 0,
+
+    SWITCH = 1,
+
+    TEXTAREA = 2,
+
+    SELECT = 3,
+
+    UPLOAD_IMG = 4,
+}
