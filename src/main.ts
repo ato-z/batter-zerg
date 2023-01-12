@@ -7,6 +7,9 @@ import { appConfig } from '@config/app';
 import { AppValidationPipe } from './validation';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { queue } from './modules/common/queue';
+import { ImageQiniuQueue } from './modules/common/image/qiniu';
+import { ImageColorQueue } from './modules/common/image/color';
 
 const rootPath = resolve(__dirname);
 staticConfig.root = rootPath;
@@ -55,3 +58,7 @@ async function bootstrap() {
     await app.listen(appConfig.runPort, appConfig.runIp);
 }
 bootstrap();
+
+/** 添加任务队列 */
+queue.use(ImageQiniuQueue); // 图像上传七牛云
+queue.use(ImageColorQueue); // 计算图像主色
