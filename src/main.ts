@@ -60,5 +60,5 @@ async function bootstrap() {
 bootstrap();
 
 /** 添加任务队列 */
-queue.use(ImageQiniuQueue); // 图像上传七牛云
+// queue.use(ImageQiniuQueue); // 图像上传七牛云
 queue.use(ImageColorQueue); // 计算图像主色
