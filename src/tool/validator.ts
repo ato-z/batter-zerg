@@ -1,5 +1,5 @@
 import { GoodsCateModel } from '@database/good.cate.databse';
-import { ImageModel } from '@database/image.databser';
+import { ImageModel } from '@database/image.database';
 import { buildMessage, ValidateBy, ValidationOptions } from 'class-validator';
 
 /** 檢驗圖像id是否合法 */

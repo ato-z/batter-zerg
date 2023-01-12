@@ -1,5 +1,5 @@
 import { ConfigModel, ConfigSeleteValue } from '@database/config.database';
-import { ImageBase } from '@database/image.databser';
+import { ImageBase } from '@database/image.database';
 import { Injectable } from '@nestjs/common';
 import { ConfigType } from '@src/enum';
 import { OP } from 'mysql-crud-core/enum';

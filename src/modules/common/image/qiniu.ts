@@ -1,7 +1,7 @@
 import { UseQueueController } from '../queue/queue';
 import { QueueList } from '../queue/list';
 import { QiNiuService } from '../qiniu/qiniu.service';
-import { ImageBase, ImageModel } from '@database/image.databser';
+import { ImageBase, ImageModel } from '@database/image.database';
 import { ImageFrom } from '@src/enum';
 
 const imageModel = new ImageModel();

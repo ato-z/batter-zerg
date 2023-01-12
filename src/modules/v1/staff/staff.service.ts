@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { ImageModel } from '@database/image.databser';
+import { ImageModel } from '@database/image.database';
 import { type StaffBase, StaffModel } from '@database/staff.database';
 import { StaffLevel, StaffStatusEnum } from '@src/enum';
 import { ApiException } from '@src/exceptions';

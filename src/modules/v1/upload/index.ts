@@ -1,4 +1,4 @@
-import { ImageModel } from '@database/image.databser';
+import { ImageModel } from '@database/image.database';
 import { Module } from '@nestjs/common';
 import { ImageService } from './image.service';
 import { UploadController } from './upload.controller';

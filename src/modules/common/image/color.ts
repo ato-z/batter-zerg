@@ -1,5 +1,5 @@
 import { UseQueueController } from '../queue/queue';
-import { ImageBase, ImageModel } from '@database/image.databser';
+import { ImageBase, ImageModel } from '@database/image.database';
 import { PNG } from 'pngjs/browser';
 import { createReadStream, readFileSync } from 'fs';
 import { join } from 'path';

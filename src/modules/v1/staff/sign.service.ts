@@ -1,5 +1,5 @@
 import { type StaffBase, StaffModel } from '@database/staff.database';
-import { ImageModel } from '@database/image.databser';
+import { ImageModel } from '@database/image.database';
 import { ApiException, ApiNotFoundException } from '@src/exceptions';
 import { StaffStatusEnum } from '@src/enum';
 import { HttpStatus } from '@nestjs/common';

@@ -1,6 +1,6 @@
 import { appConfig } from '@config/app';
 import { staticConfig } from '@config/static';
-import { ImageModel, type ImageBase } from '@database/image.databser';
+import { ImageModel, type ImageBase } from '@database/image.database';
 import { Injectable } from '@nestjs/common';
 import { ApiException } from '@src/exceptions';
 import { fillZero, getImageAttr, touchPath } from '@src/tool';
