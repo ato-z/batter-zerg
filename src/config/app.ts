@@ -49,4 +49,10 @@ export const appConfig = {
     /** 七牛雲圖片上傳成功回調地址 */
     qiniuImageUploadCallback:
         'http://4453919yn5.wicp.vip:59167/v1/upload/callback/qiniu_image',
+
+    /** 空隊列重啓間隔 */
+    queue: {
+        interval: 300000, // 30分鐘后
+        MaxInterval: 7200000, // 2小時
+    },
 };
