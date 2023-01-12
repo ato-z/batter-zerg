@@ -21,7 +21,7 @@ export const appConfig = {
     /** token有效期 */
     expTime: 7200,
     /** 图片上传大小限制 */
-    maxUploadImage: 5 * 1024 * 1024, // 5M
+    maxUploadImage: 10 * 1024 * 1024, // 5M
     /** 圖像上傳至服務器的默認色碼 */
     themeImageColor: '121212',
     /** swagger文檔配置 */
@@ -46,13 +46,9 @@ export const appConfig = {
         'menu/get',
         'config/os',
     ],
-    /** 七牛雲圖片上傳成功回調地址 */
-    qiniuImageUploadCallback:
-        'http://4453919yn5.wicp.vip:59167/v1/upload/callback/qiniu_image',
-
     /** 空隊列重啓間隔 */
     queue: {
-        interval: 300000, // 30分鐘后
+        interval: 6000, // 30分鐘后
         MaxInterval: 7200000, // 2小時
     },
 };

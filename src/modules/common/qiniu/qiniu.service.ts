@@ -4,7 +4,6 @@ import { ConfigModel } from '@database/config.database';
 import { ConfigService } from '@v1/config/condig.service';
 import { join } from 'path';
 import * as qiniu from 'qiniu';
-const { qiniuImageUploadCallback } = appConfig;
 
 const configModel = new ConfigModel();
 const configService = new ConfigService(configModel);
@@ -16,6 +15,7 @@ type QiniuConfig = {
     useHttpsDomain: boolean;
     useCdnDomain: boolean;
     bucket: string;
+    callbackUrl: string;
 };
 
 /**
@@ -25,16 +25,19 @@ export class QiNiuService {
     private config: qiniu.conf.Config;
     private mac: qiniu.auth.digest.Mac;
     private bucket: string;
+    private dbConfigPending: Promise<unknown>;
+    private callbackUrl: string;
 
     constructor() {
-        this.init();
+        this.dbConfigPending = this.init();
     }
 
     private async init() {
         const config = await configService.withOsConfig<QiniuConfig>([
-            1, 2, 3, 4, 5, 6,
+            1, 2, 3, 4, 5, 6, 13,
         ]);
         this.bucket = config.bucket;
+        this.callbackUrl = config.callbackUrl;
         this.initConfig(config);
         this.initMac(config);
     }
@@ -61,11 +64,11 @@ export class QiNiuService {
                 '{"key":"$(key)","hash":"$(etag)","fsize":$(fsize),"bucket":"$(bucket)","name":"$(x:name)"}',
         },
     ) {
-        const { bucket, mac } = this;
+        const { bucket, mac, callbackUrl } = this;
         const options = Object.assign(
             {
                 scope: bucket,
-                callbackUrl: qiniuImageUploadCallback,
+                callbackUrl,
                 callbackBodyType: 'application/json',
             },
             option,
@@ -75,7 +78,8 @@ export class QiNiuService {
         return uploadToken;
     }
 
-    uploadByLocal(file: string, option?: qiniu.rs.PutPolicyOptions) {
+    async uploadByLocal(file: string, option?: qiniu.rs.PutPolicyOptions) {
+        await this.dbConfigPending;
         const localFile = join(staticConfig.root, file);
         const uploadToken = this.getUploadToken(option);
         const formUploader = this.uploader;
