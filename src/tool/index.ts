@@ -10,7 +10,7 @@ import { Parser } from 'imagesize';
  * fillZero(10) // => 10
  * ```
  */
-export const fillZero = (n: number): string => {
+export const fillZero = (n: number | string): string => {
     const codeN = n.toString();
     if (codeN.length > 1) {
         return codeN;
