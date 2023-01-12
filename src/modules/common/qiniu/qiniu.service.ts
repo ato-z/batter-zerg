@@ -1,4 +1,3 @@
-import { appConfig } from '@config/app';
 import { staticConfig } from '@config/static';
 import { ConfigModel } from '@database/config.database';
 import { ConfigService } from '@v1/config/condig.service';
