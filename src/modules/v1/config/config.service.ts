@@ -105,7 +105,7 @@ export class ConfigService {
 
             return [name, codeValue];
         });
-        return Object.fromEntries(dataList);
+        return Object.fromEntries(dataList) as S;
     }
 
     private isSelectValue(value: unknown): value is ConfigSeleteValue {
