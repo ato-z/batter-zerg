@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigType } from '@src/enum';
-import { type } from 'os';
 import { BaseModel } from './base.database';
 
 export type ConfigBase = {
