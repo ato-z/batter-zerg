@@ -1,6 +1,6 @@
 import { ConfigModel } from '@database/config.database';
 import { Module } from '@nestjs/common';
-import { ConfigService } from './condig.service';
+import { ConfigService } from './config.service';
 import { ConfigController } from './config.controller';
 
 @Module({

@@ -1,8 +1,10 @@
 import { ConfigModel, ConfigSeleteValue } from '@database/config.database';
 import { ImageBase } from '@database/image.database';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigType } from '@src/enum';
+import { ApiException } from '@src/exceptions';
 import { OP } from 'mysql-crud-core/enum';
+import { ConfigUpdateDTO } from './config.dto';
 
 type PromiseResult<T> = T extends Promise<infer R> ? R : T;
 
@@ -11,6 +13,48 @@ export class ConfigService {
     constructor(private readonly configModel: ConfigModel) {}
 
     protected readonly groups = ['系統信息', '七牛雲'];
+
+    get ShortDBConfig() {
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const { ShortDBConfig } = require('../../common/db-config');
+        return ShortDBConfig;
+    }
+
+    async upConfig(configId: number, updata: ConfigUpdateDTO) {
+        const config = await this.configModel.find(configId);
+        if (config === null) throw new NotFoundException('當前配置項不存在');
+        const configData = await config.toJSON();
+
+        let value = updata.value;
+        const order = updata.order ?? configData.order;
+        if (configData.type === ConfigType.SWITCH) {
+            value = updata.value ? 1 : 0;
+        }
+        if (
+            configData.type === ConfigType.SELECT &&
+            this.isSelectValue(configData.value)
+        ) {
+            if (configData.value.option[value] === undefined) {
+                throw new ApiException('下標不存在');
+            }
+            value = JSON.stringify(
+                Object.assign({}, configData.value, {
+                    selectIndex: value,
+                }),
+            );
+        }
+        await this.configModel.update(
+            { value, order },
+            { where: { and: { id: configId } } },
+        );
+
+        // 更新对应配置
+        this.upSShortDBConfig(configId);
+    }
+
+    private upSShortDBConfig(id: number) {
+        this.ShortDBConfig.reload((config) => config.ids.includes(id));
+    }
 
     async detail() {
         const { groups } = this;
