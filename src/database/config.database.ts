@@ -31,7 +31,7 @@ export class ConfigModel extends BaseModel<ConfigBase> {
                 return JSON.parse(value) as ConfigSeleteValue;
             }
             if (data.type === ConfigType.SWITCH) {
-                return Boolean(value);
+                return value === '1' ? true : false;
             }
             if (data.type === ConfigType.UPLOAD_IMG) {
                 const img = await this.getImage(data.value);
