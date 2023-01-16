@@ -16,7 +16,7 @@ export class BaseModel<T> extends DataBaseModel<T> {
     get imageMode() {
         if (this._imageMode === undefined) {
             // eslint-disable-next-line @typescript-eslint/no-var-requires
-            const { ImageModel } = require('./image.databser');
+            const { ImageModel } = require('./image.database');
             const _imageMode = new ImageModel();
             this._imageMode = _imageMode;
         }
