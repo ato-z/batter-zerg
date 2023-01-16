@@ -2,7 +2,7 @@ import { type StaffBase, StaffModel } from '@database/staff.database';
 import { ImageModel } from '@database/image.database';
 import { ApiException, ApiNotFoundException } from '@src/exceptions';
 import { StaffStatusEnum } from '@src/enum';
-import { HttpStatus } from '@nestjs/common';
+import { HttpStatus, NotFoundException } from '@nestjs/common';
 import { appConfig } from '@config/app';
 import * as sha1 from 'sha1';
 
@@ -89,10 +89,10 @@ export class SignService {
         const staff = await this.model.get({
             name: name,
         });
-        const staffData = await staff.toJSON();
-        this.checkStaff(staffData, codePassworld);
+        if (staff === null) throw new NotFoundException('當前員工賬號不存在~');
+        this.checkStaff(staff.data, codePassworld);
 
-        return staffData;
+        return staff.data;
     }
 
     /** 对每个字符的ASCII码相加并返回 */
