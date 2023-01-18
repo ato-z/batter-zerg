@@ -1,6 +1,10 @@
 import { type StaffBase, StaffModel } from '@database/staff.database';
 import { ImageModel } from '@database/image.database';
-import { ApiException, ApiNotFoundException } from '@src/exceptions';
+import {
+    ApiException,
+    ApiNotFoundException,
+    SignMissException,
+} from '@src/exceptions';
 import { StaffStatusEnum } from '@src/enum';
 import { HttpStatus, NotFoundException } from '@nestjs/common';
 import { appConfig } from '@config/app';
@@ -32,11 +36,9 @@ export class SignService {
 
     /** 解密登录密钥 */
     async decodeLoginSign(sign: string, userAgent: string) {
-        if (sign === undefined)
-            throw new ApiException('非法访问', HttpStatus.FORBIDDEN);
+        if (sign === undefined) throw new SignMissException('非法访问');
         const codeSign = sign.split('g');
-        if (codeSign.length !== 4)
-            throw new ApiException('非法秘钥', HttpStatus.FORBIDDEN);
+        if (codeSign.length !== 4) throw new SignMissException('非法秘钥');
         const [codePass, createTime, codeId, keyIndex] = codeSign;
 
         // 校验是否已过有效期, config.signTime为0不判断有效期
@@ -45,7 +47,7 @@ export class SignService {
             appConfig.signTime !== 0 &&
             _createTime + appConfig.signTime < Date.now()
         ) {
-            throw new ApiException('登录过期', HttpStatus.FORBIDDEN);
+            throw new SignMissException('登录过期');
         }
         // 还原用户id
         const _codeId = parseInt('0x' + codeId);
@@ -54,10 +56,11 @@ export class SignService {
         const uid = (_codeId - hashVal) / _keyIndex;
         // 对用户身份进行校验
         const staff = await this.model.get({ id: uid });
-        const staffData = await staff.toJSON();
-        const checkPassword = sha1(staffData.password + createTime + userAgent);
-        if (checkPassword !== codePass)
-            throw new ApiException('非法秘钥', HttpStatus.FORBIDDEN);
+        if (staff === null) throw new ApiNotFoundException(`账户不存在`);
+        const staffData = staff.data;
+        const password = staffData?.password?.replace(/g/gi, '');
+        const checkPassword = sha1(password + createTime + userAgent);
+        if (checkPassword !== codePass) throw new SignMissException('非法秘钥');
         // 检验用户合法性
         this.checkStaff(staffData, staffData.password);
         return staffData;
